@@ -1,0 +1,25 @@
+{
+  "name": "hyrule_template",
+  "version": "1.0.0",
+  "description": "基于electron的脚手架模板生成工具",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hyruleteam/hyrule_template.git"
+  },
+  "keywords": [
+    "hyrule"
+  ],
+  "author": "syrxw",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hyruleteam/hyrule_template/issues"
+  },
+  "homepage": "https://github.com/hyruleteam/hyrule_template#readme",
+  "devDependencies": {
+    "electron": "^1.8.4"
+  }
+}
