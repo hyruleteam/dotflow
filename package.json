@@ -1,25 +1,22 @@
 {
-  "name": "hyrule_template",
-  "version": "1.0.0",
-  "description": "基于electron的脚手架模板生成工具",
-  "main": "main.js",
+  "name": "template",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "./",
+  "main": "src/electron-starter.js",
+  "dependencies": {
+    "electron": "^1.8.6",
+    "foreman": "^2.0.0",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
+    "react-scripts": "1.1.4"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/hyruleteam/hyrule_template.git"
-  },
-  "keywords": [
-    "hyrule"
-  ],
-  "author": "syrxw",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/hyruleteam/hyrule_template/issues"
-  },
-  "homepage": "https://github.com/hyruleteam/hyrule_template#readme",
-  "devDependencies": {
-    "electron": "^1.8.4"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "electron": "electron .",
+    "dev": "nf start -p 3000"
   }
 }
