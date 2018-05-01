@@ -24,12 +24,8 @@ app.on('ready', () => {
 
   // 加载 devtools extension
   if (is.dev()) {
-    BrowserWindow.addDevToolsExtension(
-      join($dirname, '../../extensions/redux-devtools/2.11.1_0'),
-    );
-    BrowserWindow.addDevToolsExtension(
-      join($dirname, '../../extensions/react-developer-tools/0.15.4_0'),
-    );
+    BrowserWindow.addDevToolsExtension(join($dirname, '../../extensions/redux-devtools/2.11.1_0'));
+    BrowserWindow.addDevToolsExtension(join($dirname, '../../extensions/react-developer-tools/0.15.4_0'));
   }
 });
 
