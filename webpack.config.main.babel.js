@@ -3,29 +3,27 @@ import path from 'path';
 
 const outputPath = path.join(__dirname, 'app', 'dist');
 export default {
-  target: 'electron',
-  entry: {
-    main: './src/main/index.js',
+  target : 'electron-renderer',
+  entry : {
+    main: './src/main/index.js'
   },
-  output: {
+  output : {
     path: outputPath,
-    filename: '[name].js',
+    filename: '[name].js'
   },
   externals(context, request, callback) {
-    callback(null, request.charAt(0) === '.' ? false : `require("${request}")`);
+    callback(null, request.charAt(0) === '.'
+      ? false
+      : `require("${request}")`);
   },
-  module: {
-    loaders: [
+  module : {
+    rules: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'babel-loader',
-      },
-    ],
+        use: 'babel-loader'
+      }
+    ]
   },
-  plugins: [
-    new webpack.DefinePlugin({
-      $dirname: '__dirname',
-    }),
-  ],
+  plugins : [new webpack.DefinePlugin({$dirname: '__dirname'})]
 };
