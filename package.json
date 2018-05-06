@@ -7,11 +7,11 @@
   "scripts": {
     "start": "electron app/dist/main",
     "postinstall": "cd app && tnpm i && cd .. && npm run rebuild",
-    "dev:renderer": "roadhog dev --no-open",
+    "dev:renderer": "cross-env ESLINT=none roadhog dev",
     "dev:main": "webpack -w --config ./webpack.config.main.babel.js --mode development",
     "dev": "concurrently \"npm run dev:renderer\" \"npm run dev:main\"",
     "clean": "chmod u+x dist && rm -rf node_modules app/node_modules dist app/dist",
-    "build": "roadhog build && webpack --config ./webpack.config.main.babel.js --mode production",
+    "build": "cross-env ESLINT=none roadhog build && webpack --config ./webpack.config.main.babel.js --mode production",
     "lint": "eslint --ext .js src test webpack.config.babel.js",
     "test": "mocha test/**/*-test.js --require babel-register --require ./test/setup --no-timeouts",
     "rebuild": "electron-rebuild -f -w ./app",
@@ -41,9 +41,12 @@
     "concurrently": "^3.1.0",
     "devtron": "^1.4.0",
     "dva": "^2.2.3",
+    "cross-env": "^5.1.4",
+    "cross-port-killer": "^1.0.1",
     "electron": "^1.8.6",
     "electron-builder": "^20.11.1",
     "electron-debug": "^1.5.0",
+    "electron-devtools-installer": "^2.2.3",
     "electron-rebuild": "^1.7.3",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^16.1.0",
@@ -62,6 +65,9 @@
   },
   "license": "MIT",
   "dependencies": {
+    "antd": "^3.5.0",
+    "less": "2.7.2",
+    "babel-plugin-import": "^1.7.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0"
   }
 }

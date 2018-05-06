@@ -21,7 +21,7 @@ export function getCount() {
 export function getPath() {
   let path = `file://${join($dirname, '..', 'pages')}/main.html`;
   if (is.dev()) {
-    path = 'http://127.0.0.1:8000/main-dev.html';
+    path = 'http://127.0.0.1:8000';
   }
   return path;
 }
