@@ -6,7 +6,7 @@ import styles from './MainLayout.css';
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 
-function MainLayout({ children }) {
+function MainLayout({ children, location }) {
   return (
     <Layout>
       <Header className="m-header">
@@ -15,24 +15,14 @@ function MainLayout({ children }) {
           selectedKeys={[location.pathname]}
           mode="horizontal"
           theme="dark"
+          defaultSelectedKeys={['1']}
+          style={{ lineHeight: '64px' }}
         >
           <Menu.Item key="/users">
-            <Link to="/users"><Icon type="bars" />Users</Link>
+            <Link to="/users">工作流</Link>
           </Menu.Item>
           <Menu.Item key="/categorys">
-            <Link to="/categorys"><Icon type="bars" />Categorys</Link>
-          </Menu.Item>
-          <Menu.Item key="/">
-            <Link to="/"><Icon type="home" />Home</Link>
-          </Menu.Item>
-          <Menu.Item key="/product/list">
-            <Link to="/product/list"><Icon type="frown-circle" />Products</Link>
-          </Menu.Item>
-          <Menu.Item key="/order/list">
-            <Link to="/order/list"><Icon type="home" />Orders</Link>
-          </Menu.Item>
-          <Menu.Item key="/logout">
-            <Link to="/logout"><Icon type="home" />Logout</Link>
+            <Link to="/categorys">资源库</Link>
           </Menu.Item>
         </Menu>
       </Header>
