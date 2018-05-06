@@ -8,8 +8,9 @@ const { SubMenu } = Menu;
 
 function MainSidebar({ location }) {
   return (
-    <Sider width={160} style={{ background: '#fff' }}>
+    <Sider width={160}>
       <Menu
+        theme="dark"
         mode="inline"
         defaultSelectedKeys={['1']}
         defaultOpenKeys={['sub1']}
