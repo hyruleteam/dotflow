@@ -5,7 +5,10 @@ import log from 'electron-log';
 import * as application from './services/application';
 import * as window from './services/window';
 import * as menu from './services/menu';
+import * as db from './services/db';
 import * as config from './configs/config';
+
+const dbstore = db.init();
 
 log.transports.file.level = 'info';
 
@@ -50,6 +53,7 @@ app.on('quit', () => {
 global.services = {
   application,
   window,
+  dbstore,
 };
 global.configs = {
   config,

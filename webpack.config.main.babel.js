@@ -3,11 +3,11 @@ import path from 'path';
 
 const outputPath = path.join(__dirname, 'app', 'dist');
 export default {
-  target : 'electron-renderer',
-  entry : {
-    main: './src/main/index.js'
+  target: 'electron-renderer',
+  entry: {
+    main: './src/main/index.js',
   },
-  output : {
+  output: {
     path: outputPath,
     filename: '[name].js'
   },
@@ -16,7 +16,7 @@ export default {
       ? false
       : `require("${request}")`);
   },
-  module : {
+  module: {
     rules: [
       {
         test: /\.js$/,
@@ -25,5 +25,5 @@ export default {
       }
     ]
   },
-  plugins : [new webpack.DefinePlugin({$dirname: '__dirname'})]
+  plugins: [new webpack.DefinePlugin({ $dirname: '__dirname' })]
 };
