@@ -1,12 +1,12 @@
 {
-  "name": "dva-boilerplate-electron",
+  "name": "dotflow",
   "version": "0.1.0",
-  "productName": "Boilerplate",
+  "productName": "dotflow",
   "description": "Yet another boilerplate for dva.",
   "main": "dist/main.js",
   "author": {
-    "name": "chencheng",
-    "email": "sorrycc@gmail.com"
+    "name": "wenyu",
+    "email": "wangwenyu9394@gmail.com"
   },
   "dependencies": {
     "electron-config": "^0.2.1",
