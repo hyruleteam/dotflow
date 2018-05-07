@@ -11,12 +11,7 @@ const data = flowlist;
 
 const { dbstore } = remote.getGlobal('services');
 
-// const doc = {
-//   id: 1,
-//   name: 'perillaroc',
-// };
-
-dbstore.find({}, (err, newDoc) => {
+dbstore.flowList.find({}, (err, newDoc) => {
   console.log(newDoc);
 });
 
