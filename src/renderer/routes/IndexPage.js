@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, List, Avatar, Tag, Pagination } from 'antd';
+import { Button, List, Avatar, Tag } from 'antd';
 import { connect } from 'dva';
 import MainLayout from '../components/mainLayout/MainLayout';
 import publicStyles from './public.less';
@@ -68,7 +68,6 @@ function IndexPage({ location }) {
           )}
         />
       </div>
-      <Pagination defaultCurrent={1} total={50} style={{float:"right"}}/>
     </MainLayout>
   );
 }
