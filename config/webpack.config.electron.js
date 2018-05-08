@@ -1,11 +1,10 @@
 const path = require('path');
 const webpack = require('webpack');
 const paths = require('./paths');
-
 module.exports = {
   target: 'electron-renderer',
   entry: {
-    main: './main/index.js'
+    main: './src/main/index.js'
   },
   output: {
     path: paths.appBuild,
