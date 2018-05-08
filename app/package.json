@@ -4,6 +4,7 @@
   "productName": "dotflow",
   "description": "Yet another boilerplate for dva.",
   "main": "dist/main.js",
+  "homepage": "./",
   "author": {
     "name": "wenyu",
     "email": "wangwenyu9394@gmail.com"
