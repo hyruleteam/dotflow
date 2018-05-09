@@ -90,7 +90,7 @@ module.exports = {
     // for React Native Web.
     extensions: ['.web.js', '.mjs', '.js', '.json', '.web.jsx', '.jsx'],
     alias: {
-      
+
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web',
@@ -115,13 +115,14 @@ module.exports = {
       // It's important to do this before Babel processes the JS.
       {
         test: /\.(js|jsx|mjs)$/,
+        exclude: /node_modules/,
         enforce: 'pre',
         use: [
           {
             options: {
               formatter: eslintFormatter,
               eslintPath: require.resolve('eslint'),
-              
+
             },
             loader: require.resolve('eslint-loader'),
           },
@@ -149,7 +150,7 @@ module.exports = {
             include: paths.appSrc,
             loader: require.resolve('babel-loader'),
             options: {
-              
+
               compact: true,
             },
           },
@@ -166,7 +167,8 @@ module.exports = {
           // use the "style" loader inside the async code so CSS from them won't be
           // in the main CSS file.
           {
-            test: /\.css$/,
+            test: /\.(css|less)$/,
+            exclude: /node_modules/,
             loader: ExtractTextPlugin.extract(
               Object.assign(
                 {
@@ -181,6 +183,8 @@ module.exports = {
                       loader: require.resolve('css-loader'),
                       options: {
                         importLoaders: 1,
+                        modules: true, //开启css_modules
+                        localIdentName: "[name]__[local]-[hash:base64:5]",//配置modules name
                         minimize: true,
                         sourceMap: shouldUseSourceMap,
                       },
@@ -205,12 +209,29 @@ module.exports = {
                         ],
                       },
                     },
+                    {
+                      loader: require.resolve('less-loader'),
+                      options: { javascriptEnabled: true }
+                    }
                   ],
                 },
                 extractTextPluginOptions
               )
             ),
             // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
+          },
+          {
+            test:/\.css$/,
+            exclude:/src/,
+            use:[
+              { loader: "style-loader",},
+              {
+                loader: "css-loader",
+                options:{
+                  importLoaders:1
+                }
+              }
+            ],
           },
           // "file" loader makes sure assets end up in the `build` folder.
           // When you `import` an asset, you get its filename.
