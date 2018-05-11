@@ -1,11 +1,20 @@
 import React, { Component } from 'react';
 import { Button, List, Avatar, Tag } from 'antd';
+import { connect } from 'react-redux';
+import store from '../../store.js';
+import {show} from '../../actions/flowList';
 import MainLayout from '../layout/MainLayout';
 import publicStyles from '../layout/public.less';
-
-const data = {};
+import {fetchOriginData} from '../../api/flowlist'
 
 class FlowList extends Component{
+  constructor(props){
+    super(props)
+  }
+  componentWillMount() {
+    store.dispatch(show(fetchOriginData()));
+    console.log(this.props)
+  }
   render() {
     return (
       <MainLayout location={this.props.location}>
@@ -17,7 +26,7 @@ class FlowList extends Component{
           <List
             className="demo-loadmore-list"
             itemLayout="horizontal"
-            dataSource={data}
+            dataSource={this.props.flowlist.flowlist}
             renderItem={item => (
               <List.Item actions={item.actions}>
                 <List.Item.Meta
@@ -35,4 +44,11 @@ class FlowList extends Component{
   }
 }
 
-export default FlowList;
+const mapStateToProps = store => {
+  console.log(store.flowlist)
+  return {
+    flowlist: store.flowlist
+  };
+};
+// 连接 store 和组件
+export default connect(mapStateToProps)(FlowList);
