@@ -1,25 +1,30 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Layout } from 'antd';
 import MainHeader from './MainHeader';
 import MainSide from './MainSide';
-import './MainLayout.less';
+import styles from './MainLayout.less';
 
 const { Content } = Layout;
 
-function MainLayout({ children, location }) {
-  return (
-    <Layout className="layout">
-      <MainHeader location={location} />
-      <Layout className="bgColor">
-        <MainSide location={location} />
-        <Layout className="content bgColor">
-          <Content>
-            { children }
-          </Content>
+class MainLayout extends Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return (
+      <Layout className={styles.layout}>
+        <MainHeader />
+        <Layout className={styles['bg-color']}>
+          <MainSide location={this.props.location}/>
+          <Layout className={[styles.content, styles['bg-color']]}>
+            <Content>
+              { this.props.children }
+            </Content>
+          </Layout>
         </Layout>
       </Layout>
-    </Layout>
-  );
+    );
+  }
 }
 
 export default MainLayout;
