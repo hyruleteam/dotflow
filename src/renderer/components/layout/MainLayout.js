@@ -7,9 +7,6 @@ import styles from './MainLayout.less';
 const { Content } = Layout;
 
 class MainLayout extends Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
     return (
       <Layout className={styles.layout}>

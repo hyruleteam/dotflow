@@ -6,9 +6,6 @@ import publicStyles from '../layout/public.less';
 const data = {};
 
 class FlowList extends Component{
-  constructor(props) {
-    super(props);
-  }
   render() {
     return (
       <MainLayout location={this.props.location}>

@@ -3,7 +3,7 @@ import {
   BrowserRouter as Router,
 } from 'react-router-dom'
 import DefaultRouter from '../../route';
-import './App.css';
+import './index.css';
 
 class Index extends Component {
   render() {

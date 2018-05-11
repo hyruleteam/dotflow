@@ -8,9 +8,6 @@ const { Sider } = Layout;
 const { SubMenu } = Menu;
 
 class MainSidebar extends Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
     return (
       <Sider width={160}>
