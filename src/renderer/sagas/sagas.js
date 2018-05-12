@@ -1,10 +1,9 @@
-import { call, put, fork } from 'redux-saga/effects'
+import { call, put, fork, takeEvery } from 'redux-saga/effects'
 import {fetch} from '../api/flowlist';
-import { takeEvery } from 'redux-saga'
 
 
 function fetchFailure(){
-  console.log(1)
+  console.log('fetchFailure')
 }
 
 export function* rootSaga() {
@@ -21,6 +20,6 @@ export function* fetchList() {
 }
 
 export function* watchFetchList() {
-  yield* takeEvery('FLOWLIST_REQUEST', fetchList)
+  yield takeEvery('FLOWLIST_REQUEST', fetchList)
 }
 
