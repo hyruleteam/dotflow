@@ -1,3 +1,4 @@
 export const LOADING_STATUS = 'LOADING_STATUS';
 export const SHOW = 'SHOW';
 export const FLOWLIST_REQUEST = 'FLOWLIST_REQUEST';
+export const FLOWLIST_GITMODEL = 'FLOWLIST_GITMODEL';

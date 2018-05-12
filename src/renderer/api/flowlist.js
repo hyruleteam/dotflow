@@ -5,9 +5,10 @@ import store from '../store.js';
 const {remote} = window.require('electron');
 const {dbstore} = remote.getGlobal('services');
 
-export function fetchOriginData() {
-  return flowlist;
-}
+// dbstore.flowList.update({ _id: 'vSD2ifhx0oEmxx8u' }, { $set: { isDefault: 0 } }, function (err, numReplaced) {
+//   // numReplaced = 3
+//   // Field 'system' on Mars, Earth, Jupiter now has value 'solar system'
+// });
 
 export function fetch() {
   store.dispatch({type: types.LOADING_STATUS, status: true});
@@ -15,12 +16,12 @@ export function fetch() {
     dbstore
       .flowList
       .find({}, (err, newDoc) => {
-        if (err) 
+        if (err)
           reject(err);
         setTimeout(() => {
-          resolve(newDoc);
+          resolve([...flowlist,...newDoc]);
           store.dispatch({type: types.LOADING_STATUS, status: false});
-        }, 1000);
+        }, 500);
       });
   });
 }
