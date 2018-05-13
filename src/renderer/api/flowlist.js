@@ -10,7 +10,7 @@ const {dbstore} = remote.getGlobal('services');
 //   // Field 'system' on Mars, Earth, Jupiter now has value 'solar system'
 // });
 
-export function fetch() {
+export function fetchFlowList() {
   store.dispatch({type: types.LOADING_STATUS, status: true});
   return new Promise((resolve, reject) => {
     dbstore
@@ -22,6 +22,19 @@ export function fetch() {
           resolve([...flowlist,...newDoc]);
           store.dispatch({type: types.LOADING_STATUS, status: false});
         }, 500);
+      });
+  });
+}
+
+export function addFlowList(data){
+  return new Promise((resolve, reject) => {
+    dbstore
+      .flowList
+      .insert({...data}, (err, newDoc) => {
+        if (err){
+          reject(err);
+        }
+        resolve({code:1,data:{...newDoc}});
       });
   });
 }

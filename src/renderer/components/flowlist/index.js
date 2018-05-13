@@ -7,7 +7,7 @@ import GitModel from "./gitModel";
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { model_show } from '../../actions/flowList';
+import { fetchList, showModal } from '../../actions/flowList';
 import store from '../../store.js';
 
 const renderActions = (type)=> {
@@ -26,7 +26,7 @@ class FlowList extends Component {
   }
 
   componentWillMount() {
-    store.dispatch({ type: 'FLOWLIST_REQUEST' });
+    this.props.fetchList();
   }
 
   render() {
@@ -40,7 +40,7 @@ class FlowList extends Component {
             type="primary"
             className={publicStyles['op-btn']}
             icon="upload"
-            onClick={() => {this.props.model_show(true)}}>从git repo新增脚手架</Button>
+            onClick={() => {this.props.showModal(true)}}>从git repo新增脚手架</Button>
           <Button type="primary" className={publicStyles['op-btn']} icon="upload" ghost>从本地导入脚手架</Button>
         </div>
         <div className="m-flow-list">
@@ -81,7 +81,8 @@ const mapStateToProps = store => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    model_show: bindActionCreators(model_show, dispatch)
+    fetchList: bindActionCreators(fetchList, dispatch),
+    showModal: bindActionCreators(showModal, dispatch)
   };
 };
 
