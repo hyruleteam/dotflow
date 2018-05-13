@@ -37,13 +37,32 @@ const handleOk = (props) => {
 }
 
 const handleCancel = (props) => {
+		props.showModal(false);
 		props
 				.form
 				.resetFields();
-		props.showModal(false);
 }
 
-const GitModel = Form.create()((props) => {
+const GitModel = Form.create({
+  mapPropsToFields(props) {
+		if(props.data){
+			return {
+				name:Form.createFormField({
+					value: props.data[0].name,
+				}),
+				description:Form.createFormField({
+					value: props.data[0].description,
+				}),
+				gitRepo:Form.createFormField({
+					value: props.data[0].gitRepo,
+				}),
+			};
+		}
+  },
+  // onFieldsChange(props, fields) {
+  //   console.log('onFieldsChange', fields);
+  // },
+})((props) => {
 		const {visible, form} = props;
 		const {getFieldDecorator} = form;
 		return (
@@ -100,7 +119,10 @@ const GitModel = Form.create()((props) => {
 })
 
 const mapStateToProps = store => {
-		return {visible: store.flowlist.visible};
+		return {
+			visible: store.flowlist.visible,
+			data: store.flowlist.data
+		};
 };
 
 const mapDispatchToProps = dispatch => {

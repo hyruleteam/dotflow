@@ -38,3 +38,29 @@ export function addFlowList(data){
       });
   });
 }
+
+export function showFlowList(id){
+  return new Promise((resolve, reject) => {
+    dbstore
+      .flowList
+      .find({_id:id}, (err, newDoc) => {
+        if (err){
+          reject(err);
+        }
+        resolve({code:1,data:{...newDoc}});
+      });
+  });
+}
+
+export function editFlowList(id){
+  return new Promise((resolve, reject) => {
+    dbstore
+      .flowList
+      .find({_id:id}, (err, newDoc) => {
+        if (err){
+          reject(err);
+        }
+        resolve({code:1,data:{...newDoc}});
+      });
+  });
+}

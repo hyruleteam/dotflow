@@ -4,4 +4,6 @@ export const OPERATE_FAILED = 'OPERATE_FAILED';
 export const SHOW = 'SHOW';
 export const FLOWLIST_REQUEST = 'FLOWLIST_REQUEST';
 export const FLOWLIST_ADD = 'FLOWLIST_ADD';
+export const FLOWLIST_SHOW = 'FLOWLIST_SHOW';
+export const FLOWLIST_EDIT = 'FLOWLIST_EDIT';
 export const FLOWLIST_GITMODEL = 'FLOWLIST_GITMODEL';

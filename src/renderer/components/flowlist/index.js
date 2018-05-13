@@ -7,17 +7,7 @@ import GitModel from "./gitModel";
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { fetchList, showModal } from '../../actions/flowList';
-
-const renderActions = (type)=> {
-  if(type === 1){
-    return [<span className={publicStyles['op-list-btn']}>创建项目</span>]
-  } else if (type === 0){
-    return [<span className={publicStyles['op-list-btn']}>创建项目</span>,
-    <span className={publicStyles['op-list-btn']}>编辑</span>,
-    <span className={publicStyles['op-list-btn']}>删除</span>]
-  }
-};
+import { fetchList, showModal,showData } from '../../actions/flowList';
 
 class FlowList extends Component {
   constructor(props) {
@@ -27,6 +17,16 @@ class FlowList extends Component {
   componentWillMount() {
     this.props.fetchList();
   }
+
+  renderActions(type,id) {
+    if(type === 1){
+      return [<span className={publicStyles['op-list-btn']}>创建项目</span>]
+    } else if (type === 0){
+      return [<span className={publicStyles['op-list-btn']}>创建项目</span>,
+      <span className={publicStyles['op-list-btn']} onClick={() => {this.props.showData(id)}}>编辑</span>,
+      <span className={publicStyles['op-list-btn']}>删除</span>]
+    }
+  };
 
   render() {
     return (
@@ -49,7 +49,7 @@ class FlowList extends Component {
               itemLayout="horizontal"
               dataSource={this.props.flowlist.list}
               renderItem={item => (
-                <List.Item actions={renderActions(item.isDefault)}>
+                <List.Item actions={this.renderActions(item.isDefault,item._id)}>
                   <List.Item.Meta
                     avatar={< Avatar> {
                       item.avatar
@@ -81,7 +81,8 @@ const mapStateToProps = store => {
 const mapDispatchToProps = dispatch => {
   return {
     fetchList: bindActionCreators(fetchList, dispatch),
-    showModal: bindActionCreators(showModal, dispatch)
+    showModal: bindActionCreators(showModal, dispatch),
+    showData: bindActionCreators(showData, dispatch)
   };
 };
 
