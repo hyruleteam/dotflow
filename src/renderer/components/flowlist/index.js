@@ -8,7 +8,6 @@ import GitModel from "./gitModel";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchList, showModal } from '../../actions/flowList';
-import store from '../../store.js';
 
 const renderActions = (type)=> {
   if(type === 1){

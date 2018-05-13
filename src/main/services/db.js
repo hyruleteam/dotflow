@@ -9,7 +9,7 @@ const db = {};
 let normalPath = `${app.getPath('userData')}/dotflow/db`;
 
 if (is.dev()) {
-  normalPath = `${join($dirname, '..', 'dist')}/db`;
+  normalPath = `${join($dirname, '..', 'temp')}/db`;
 }
 
 db.flowList = new Datastore({

@@ -8,10 +8,10 @@ import reducers from './reducers';
 import {rootSaga} from './sagas/sagas';
 
 const sagaMiddleware = createSageMiddleWare();
+const applyMiddle = process.env.NODE_ENV === 'development'?applyMiddleware(sagaMiddleware, logger):applyMiddleware(sagaMiddleware)
 const store = createStore(
   reducers,
-  applyMiddleware(sagaMiddleware, logger)
+  applyMiddle
 )
-
 sagaMiddleware.run(rootSaga)
 export default store;
