@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, List, Avatar, Tag, Spin } from 'antd';
+import { Button, List, Avatar, Tag, Spin,Popconfirm } from 'antd';
 
 import MainLayout from '../layout/MainLayout';
 import publicStyles from '../layout/public.less';
@@ -7,7 +7,7 @@ import GitModel from "./gitModel";
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { fetchList, showModal,showData } from '../../actions/flowList';
+import { fetchList, showModal,showData, deleteData} from '../../actions/flowList';
 
 class FlowList extends Component {
   constructor(props) {
@@ -24,7 +24,9 @@ class FlowList extends Component {
     } else if (type === 0){
       return [<span className={publicStyles['op-list-btn']}>创建项目</span>,
       <span className={publicStyles['op-list-btn']} onClick={() => {this.props.showData(id)}}>编辑</span>,
-      <span className={publicStyles['op-list-btn']}>删除</span>]
+      <Popconfirm placement="topRight" title="确认删除？" onConfirm={() => {this.props.deleteData(id)}} okText="确认" cancelText="取消">
+        <span className={publicStyles['op-list-btn']}>删除</span>
+      </Popconfirm>]
     }
   };
 
@@ -82,7 +84,8 @@ const mapDispatchToProps = dispatch => {
   return {
     fetchList: bindActionCreators(fetchList, dispatch),
     showModal: bindActionCreators(showModal, dispatch),
-    showData: bindActionCreators(showData, dispatch)
+    showData: bindActionCreators(showData, dispatch),
+    deleteData:bindActionCreators(deleteData, dispatch)
   };
 };
 

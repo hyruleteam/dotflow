@@ -12,14 +12,18 @@ export function addData(data) {
   return {type: types.FLOWLIST_ADD, data};
 }
 
-export function showData(id,data) {
-  return {type: types.FLOWLIST_SHOW, id, data};
+export function showData(id) {
+  return {type: types.FLOWLIST_SHOW, id};
 }
 
 export function editData(data) {
   return {type: types.FLOWLIST_EDIT, data};
 }
 
-export function showModal(visible) {
-  return { type: types.FLOWLIST_GITMODEL, visible};
+export function deleteData(id) {
+  return {type: types.FLOWLIST_DELETE, id};
+}
+
+export function showModal(visible,data={},isEdit=false) {
+  return { type: types.FLOWLIST_GITMODEL, visible,data,isEdit};
 }

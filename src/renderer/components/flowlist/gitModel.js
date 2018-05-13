@@ -3,7 +3,7 @@ import {Modal, Form, Input} from 'antd';
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {showModal, addData} from '../../actions/flowList';
+import {showModal, addData, editData} from '../../actions/flowList';
 
 const FormItem = Form.Item;
 
@@ -25,13 +25,21 @@ const handleOk = (props) => {
 										.name
 										.substring(0, 1)
 										.toUpperCase();
-								const data = {
+								if(props.isEdit){
+									const data = {
+										values:{...values},
+										_id:props.data[0]._id
+									}
+									props.editData(data)
+								}else{
+									const data = {
 										...values,
 										avatar: avatar,
 										type: 'git',
 										isDefault: 0
-								}
-								props.addData(data)
+									}
+									props.addData(data)
+								}	
 						}
 				});
 }
@@ -45,7 +53,7 @@ const handleCancel = (props) => {
 
 const GitModel = Form.create({
   mapPropsToFields(props) {
-		if(props.data){
+		if(props.isEdit){
 			return {
 				name:Form.createFormField({
 					value: props.data[0].name,
@@ -121,17 +129,17 @@ const GitModel = Form.create({
 const mapStateToProps = store => {
 		return {
 			visible: store.flowlist.visible,
-			data: store.flowlist.data
+			data: store.flowlist.data,
+			isEdit:store.flowlist.isEdit
 		};
 };
 
 const mapDispatchToProps = dispatch => {
 		return {
 				showModal: bindActionCreators(showModal, dispatch),
-				addData: bindActionCreators(addData, dispatch)
+				addData: bindActionCreators(addData, dispatch),
+				editData: bindActionCreators(editData, dispatch)
 		};
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(GitModel);
-
-// export default GitModel

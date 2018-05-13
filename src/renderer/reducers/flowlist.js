@@ -4,7 +4,6 @@ const flowlistReducer = function (state = {}, action) {
   const list = action.flowlist;
   const status = action.status;
   const visible = action.visible;
-  const data = action.data;
   switch (action.type) {
     case types.SHOW:
       return {
@@ -19,7 +18,8 @@ const flowlistReducer = function (state = {}, action) {
     case types.FLOWLIST_GITMODEL:
       return {
         ...state,
-        data,
+        isEdit:action.isEdit,
+        data:action.data,
         visible
       };
     default:

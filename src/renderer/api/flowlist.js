@@ -43,24 +43,37 @@ export function showFlowList(id){
   return new Promise((resolve, reject) => {
     dbstore
       .flowList
-      .find({_id:id}, (err, newDoc) => {
+      .find({_id:id}, (err, docs) => {
         if (err){
           reject(err);
         }
-        resolve({code:1,data:{...newDoc}});
+        resolve({code:1,data:{...docs}});
       });
   });
 }
 
-export function editFlowList(id){
+export function editFlowList(data){
   return new Promise((resolve, reject) => {
     dbstore
       .flowList
-      .find({_id:id}, (err, newDoc) => {
+      .update({_id:data._id},{ $set: { ...data.values } }, (err, numReplaced) => {
         if (err){
           reject(err);
         }
-        resolve({code:1,data:{...newDoc}});
+        resolve({code:1,data:{...numReplaced}});
+      });
+  });
+}
+
+export function deleteFlowList(id){
+  return new Promise((resolve, reject) => {
+    dbstore
+      .flowList
+      .remove({_id:id},{ }, (err, numRemoved) => {
+        if (err){
+          reject(err);
+        }
+        resolve({code:1,data:{...numRemoved}});
       });
   });
 }
