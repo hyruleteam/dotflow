@@ -6,7 +6,7 @@ const Datastore = require('nedb');
 
 // filename: `${join($dirname, '..', 'assets')}/db/data.db`,
 const db = {};
-let normalPath = `${app.getPath('userData')}/dotflow/db`;
+let normalPath = `${app.getPath('appData')}/dotflow/db`;
 
 if (is.dev()) {
   normalPath = `${join($dirname, '..', 'temp')}/db`;

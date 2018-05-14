@@ -5,7 +5,7 @@ import {
 import createSageMiddleWare from 'redux-saga';
 import logger from 'redux-logger';
 import reducers from './reducers';
-import {rootSaga} from './sagas/sagas';
+import {rootSaga} from './sagas/rootSaga';
 
 const sagaMiddleware = createSageMiddleWare();
 const applyMiddle = process.env.NODE_ENV === 'development'?applyMiddleware(sagaMiddleware, logger):applyMiddleware(sagaMiddleware)

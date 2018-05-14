@@ -1,12 +1,13 @@
 import * as types from '../actions/action-type.js';
 
 const publicReducer = function (state = {}, action) {
-  const list = action.flowlist;
+  const status = action.status;
+  console.log(status)
   switch (action.type) {
-    case types.SHOW:
+    case types.LOADING_STATUS:
       return {
         ...state,
-        list
+        status
       };
     default:
       return state

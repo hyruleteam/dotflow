@@ -1,19 +1,15 @@
-import {call, put, fork, takeEvery} from 'redux-saga/effects'
+import {call, put, takeEvery} from 'redux-saga/effects'
 import {fetchFlowList, addFlowList, showFlowList, editFlowList, deleteFlowList} from '../api/flowlist';
 import {message} from 'antd';
 
 function fetchFailure() {
-  console.log('fetchFailure')
-}
-
-export function * rootSaga() {
-  yield fork(watchFetchList)
+  message.error('操作失败', 2);
 }
 
 export function * fetchList() {
   try {
     const response = yield call(fetchFlowList);
-    yield put({type: 'SHOW', flowlist: response});
+    yield put({type: 'FLOWLIST_LIST', flowlist: response});
   } catch (error) {
     yield put(fetchFailure());
   }
@@ -68,7 +64,7 @@ export function * flowListDelete(action) {
   }
 }
 
-export function * watchFetchList() {
+export function * watchFlowList() {
   yield takeEvery('FLOWLIST_REQUEST', fetchList)
   yield takeEvery('FLOWLIST_ADD', flowListAdd)
   yield takeEvery('FLOWLIST_EDIT', flowListEdit)

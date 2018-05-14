@@ -45,7 +45,7 @@ class FlowList extends Component {
           <Button type="primary" className={publicStyles['op-btn']} icon="upload" ghost>从本地导入脚手架</Button>
         </div>
         <div className="m-flow-list">
-          <Spin spinning={this.props.flowlist.status}>
+          <Spin spinning={this.props.common.status}>
             <List
               className="demo-loadmore-list"
               itemLayout="horizontal"
@@ -77,7 +77,7 @@ class FlowList extends Component {
 }
 
 const mapStateToProps = store => {
-  return { flowlist: store.flowlist };
+  return { flowlist: store.flowlist,common: store.common };
 };
 
 const mapDispatchToProps = dispatch => {

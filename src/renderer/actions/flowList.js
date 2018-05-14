@@ -5,7 +5,7 @@ export function fetchList(flowlist) {
 }
 
 export function showList(flowlist) {
-  return {type: types.SHOW, flowlist};
+  return {type: types.FLOWLIST_LIST, flowlist};
 }
 
 export function addData(data) {
