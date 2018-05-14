@@ -1,5 +1,5 @@
 import {call, put, takeEvery} from 'redux-saga/effects'
-import {fetchFlowList, addFlowList, showFlowList, editFlowList, deleteFlowList,chooseFir} from '../api/flowlist';
+import {fetchFlowList, addFlowList, showFlowList, editFlowList, deleteFlowList} from '../api/flowlist';
 import {message} from 'antd';
 
 function fetchFailure() {
