@@ -10,9 +10,10 @@ import {
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {showLocalModal, addData, editData,chooseDir} from '../../actions/flowList';
+import {showLocalModal, addData, editData} from '../../actions/flowList';
 
 const FormItem = Form.Item;
+const {remote} = window.require('electron');
 
 const formItemLayout = {
 		labelCol: {
@@ -37,7 +38,7 @@ const handleOk = (props) => {
 												values: {
 														...values
 												},
-												_id: props.data[0]._id
+												_id: props.data._id
 										}
 										props.editData(data, 'local')
 								} else {
@@ -60,26 +61,28 @@ const handleCancel = (props) => {
 				.resetFields();
 }
 
+const getLocalDirPath = (props) =>{
+	remote.dialog.showOpenDialog({properties: ['openDirectory']},(filePaths) => {
+		props.form.setFieldsValue({
+      localPath: filePaths[0],
+    });
+	})
+}
+
 const LocalModel = Form.create({
 		mapPropsToFields(props) {
-		
-				if(!props.isEdit && props.dirPath){
-					return {
-						localPath: Form.createFormField({value: props.dirPath[0]})
-					}
-				}
-
 				if (props.isEdit) {
 						let data = {
-								name: Form.createFormField({value: props.data[0].name}),
-								description: Form.createFormField({value: props.data[0].description}),
-								localPath: Form.createFormField({value: props.data[0].localPath})
+								name: Form.createFormField({value: props.data.name}),
+								description: Form.createFormField({value: props.data.description}),
+								localPath: Form.createFormField({value: props.data.localPath})
 						}
-						if(props.dirPath){data.localPath = Form.createFormField({value: props.dirPath[0]})}
 						return data;
 				}
 		},
-		// onFieldsChange(props, fields) {   console.log('onFieldsChange', fields); },
+		// onFieldsChange(props, fields) {
+		// 	console.log('onFieldsChange', data);
+		// }
 })((props) => {
 		const {visible, form} = props;
 		const {getFieldDecorator} = form;
@@ -130,7 +133,11 @@ const LocalModel = Form.create({
 																})(<Input placeholder="请选择本地文件夹"/>)}
 														</Col>
 														<Col span={6}>
-																<Button type="primary" onClick={() => {props.chooseDir()}}>选择</Button>
+																<Button
+																		type="primary"
+																		onClick={() => {
+																		getLocalDirPath(props)
+																}}>选择</Button>
 														</Col>
 												</Row>
 										</FormItem>
@@ -141,12 +148,7 @@ const LocalModel = Form.create({
 })
 
 const mapStateToProps = store => {
-	return {
-		localVisible: store.flowlist.localVisible, 
-		data: store.flowlist.data, 
-		isEdit: store.flowlist.isEdit,
-		dirPath:store.flowlist.dirPath
-	};
+		return {localVisible: store.flowlist.localVisible, data: store.flowlist.data, isEdit: store.flowlist.isEdit};
 };
 
 const mapDispatchToProps = dispatch => {
@@ -154,7 +156,6 @@ const mapDispatchToProps = dispatch => {
 				showLocalModal: bindActionCreators(showLocalModal, dispatch),
 				addData: bindActionCreators(addData, dispatch),
 				editData: bindActionCreators(editData, dispatch),
-				chooseDir:bindActionCreators(chooseDir, dispatch)
 		};
 };
 

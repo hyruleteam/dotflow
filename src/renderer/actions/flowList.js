@@ -31,11 +31,3 @@ export function showGitModal(gitVisible,data={},isEdit=false) {
 export function showLocalModal(localVisible,data,isEdit=false,) {
   return { type: types.FLOWLIST_LOCALMODEL, localVisible,data,isEdit};
 }
-
-export function chooseDir(){
-  return {type:types.FLOWLIST_CHOOSEDIR}
-}
-
-export function showDir(dirPath){
-  return {type:types.FLOWLIST_SHOWDIR,dirPath}
-}

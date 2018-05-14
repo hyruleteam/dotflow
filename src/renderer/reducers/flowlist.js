@@ -26,11 +26,6 @@ const flowlistReducer = function (state = {}, action) {
         localVisible,
         modalType: action.modalType
       };
-    case types.FLOWLIST_SHOWDIR:
-      return {
-        ...state,
-        dirPath: action.dirPath
-      };
     default:
       return state
   }

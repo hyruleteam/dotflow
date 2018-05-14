@@ -37,9 +37,9 @@ export function * flowItemShow(action) {
     const response = yield call(showFlowList, action.id);
     if (response.code === 1) {
       if(action.modalType === 'git'){
-        yield put({type: 'FLOWLIST_GITMODEL', gitVisible: true, data: response.data, isEdit: true});
+        yield put({type: 'FLOWLIST_GITMODEL', gitVisible: true, data: response.data[0], isEdit: true});
       }else{
-        yield put({type: 'FLOWLIST_LOCALMODEL', localVisible: true, data: response.data, isEdit: true});
+        yield put({type: 'FLOWLIST_LOCALMODEL', localVisible: true, data: response.data[0], isEdit: true});
       }
     }
   } catch (error) {
@@ -76,22 +76,10 @@ export function * flowListDelete(action) {
   }
 }
 
-export function * flowListChooseDir(action) {
-  try {
-    const response = yield call(chooseFir);
-    if (response.code === 1) {
-      yield put({type: 'FLOWLIST_SHOWDIR',dirPath:response.data});
-    }
-  } catch (error) {
-    yield put(fetchFailure());
-  }
-}
-
 export function * watchFlowList() {
   yield takeEvery('FLOWLIST_REQUEST', fetchList)
   yield takeEvery('FLOWLIST_ADD', flowListAdd)
   yield takeEvery('FLOWLIST_EDIT', flowListEdit)
   yield takeEvery('FLOWLIST_SHOW', flowItemShow)
   yield takeEvery('FLOWLIST_DELETE', flowListDelete)
-  yield takeEvery('FLOWLIST_CHOOSEDIR', flowListChooseDir)
 }

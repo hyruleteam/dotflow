@@ -28,7 +28,7 @@ const handleOk = (props) => {
 								if(props.isEdit){
 									const data = {
 										values:{...values},
-										_id:props.data[0]._id
+										_id:props.data._id
 									}
 									props.editData(data,'git')
 								}else{
@@ -56,13 +56,13 @@ const GitModel = Form.create({
 		if(props.isEdit){
 			return {
 				name:Form.createFormField({
-					value: props.data[0].name,
+					value: props.data.name,
 				}),
 				description:Form.createFormField({
-					value: props.data[0].description,
+					value: props.data.description,
 				}),
 				gitRepo:Form.createFormField({
-					value: props.data[0].gitRepo,
+					value: props.data.gitRepo,
 				}),
 			};
 		}
