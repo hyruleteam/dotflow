@@ -4,10 +4,11 @@ import { Button, List, Avatar, Tag, Spin,Popconfirm } from 'antd';
 import MainLayout from '../layout/MainLayout';
 import publicStyles from '../layout/public.less';
 import GitModel from "./gitModel";
+import LocalModel from "./localModel";
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { fetchList, showModal,showData, deleteData} from '../../actions/flowList';
+import { fetchList, showGitModal,showLocalModal, showData, deleteData} from '../../actions/flowList';
 
 class FlowList extends Component {
   constructor(props) {
@@ -18,12 +19,12 @@ class FlowList extends Component {
     this.props.fetchList();
   }
 
-  renderActions(type,id) {
-    if(type === 1){
+  renderActions(isDefault,type,id) {
+    if(isDefault === 1){
       return [<span className={publicStyles['op-list-btn']}>创建项目</span>]
-    } else if (type === 0){
+    } else if (isDefault === 0){
       return [<span className={publicStyles['op-list-btn']}>创建项目</span>,
-      <span className={publicStyles['op-list-btn']} onClick={() => {this.props.showData(id)}}>编辑</span>,
+      <span className={publicStyles['op-list-btn']} onClick={() => {this.props.showData(id,type)}}>编辑</span>,
       <Popconfirm placement="topRight" title="确认删除？" onConfirm={() => {this.props.deleteData(id)}} okText="确认" cancelText="取消">
         <span className={publicStyles['op-list-btn']}>删除</span>
       </Popconfirm>]
@@ -34,15 +35,18 @@ class FlowList extends Component {
     return (
       <MainLayout location={this.props.location}>
       < GitModel visible = {
-        this.props.flowlist.visible
+        this.props.flowlist.gitVisible
+      } />
+      < LocalModel visible = {
+        this.props.flowlist.localVisible
       } />
         <div className="m-flow-op">
           <Button
             type="primary"
             className={publicStyles['op-btn']}
             icon="upload"
-            onClick={() => {this.props.showModal(true)}}>从git repo新增脚手架</Button>
-          <Button type="primary" className={publicStyles['op-btn']} icon="upload" ghost>从本地导入脚手架</Button>
+            onClick={() => {this.props.showGitModal(true)}}>从git repo新增脚手架</Button>
+          <Button type="primary" className={publicStyles['op-btn']} icon="upload" ghost onClick={() => {this.props.showLocalModal(true)}}>从本地导入脚手架</Button>
         </div>
         <div className="m-flow-list">
           <Spin spinning={this.props.common.status}>
@@ -51,7 +55,7 @@ class FlowList extends Component {
               itemLayout="horizontal"
               dataSource={this.props.flowlist.list}
               renderItem={item => (
-                <List.Item actions={this.renderActions(item.isDefault,item._id)}>
+                <List.Item actions={this.renderActions(item.isDefault,item.type,item._id)}>
                   <List.Item.Meta
                     avatar={< Avatar> {
                       item.avatar
@@ -83,7 +87,8 @@ const mapStateToProps = store => {
 const mapDispatchToProps = dispatch => {
   return {
     fetchList: bindActionCreators(fetchList, dispatch),
-    showModal: bindActionCreators(showModal, dispatch),
+    showGitModal: bindActionCreators(showGitModal, dispatch),
+    showLocalModal: bindActionCreators(showLocalModal, dispatch),
     showData: bindActionCreators(showData, dispatch),
     deleteData:bindActionCreators(deleteData, dispatch)
   };

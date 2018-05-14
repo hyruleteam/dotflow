@@ -77,3 +77,11 @@ export function deleteFlowList(id){
       });
   });
 }
+
+export function chooseFir(){
+  return new Promise((resolve, reject) => {
+    remote.dialog.showOpenDialog({properties: ['openDirectory']},(filePaths) => {
+      resolve({code:1,data:filePaths});  
+    })
+  });
+}

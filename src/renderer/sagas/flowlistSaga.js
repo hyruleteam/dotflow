@@ -1,5 +1,5 @@
 import {call, put, takeEvery} from 'redux-saga/effects'
-import {fetchFlowList, addFlowList, showFlowList, editFlowList, deleteFlowList} from '../api/flowlist';
+import {fetchFlowList, addFlowList, showFlowList, editFlowList, deleteFlowList,chooseFir} from '../api/flowlist';
 import {message} from 'antd';
 
 function fetchFailure() {
@@ -20,7 +20,11 @@ export function * flowListAdd(action) {
     const response = yield call(addFlowList, action.data);
     if (response.code === 1) {
       yield message.success('添加成功', 2);
-      yield put({type: 'FLOWLIST_GITMODEL', visible: false});
+      if(action.modalType === 'git'){
+        yield put({type: 'FLOWLIST_GITMODEL', gitVisible: false});
+      }else{
+        yield put({type: 'FLOWLIST_LOCALMODEL', localVisible: false});
+      }
       yield put({type: 'FLOWLIST_REQUEST'});
     }
   } catch (error) {
@@ -32,7 +36,11 @@ export function * flowItemShow(action) {
   try {
     const response = yield call(showFlowList, action.id);
     if (response.code === 1) {
-      yield put({type: 'FLOWLIST_GITMODEL', visible: true, data: response.data, isEdit: true});
+      if(action.modalType === 'git'){
+        yield put({type: 'FLOWLIST_GITMODEL', gitVisible: true, data: response.data, isEdit: true});
+      }else{
+        yield put({type: 'FLOWLIST_LOCALMODEL', localVisible: true, data: response.data, isEdit: true});
+      }
     }
   } catch (error) {
     yield put(fetchFailure());
@@ -44,7 +52,11 @@ export function * flowListEdit(action) {
     const response = yield call(editFlowList, action.data);
     if (response.code === 1) {
       yield message.success('编辑成功', 2);
-      yield put({type: 'FLOWLIST_GITMODEL', visible: false});
+      if(action.modalType === 'git'){
+        yield put({type: 'FLOWLIST_GITMODEL', gitVisible: false});
+      }else{
+        yield put({type: 'FLOWLIST_LOCALMODEL', localVisible: false});
+      }
       yield put({type: 'FLOWLIST_REQUEST'});
     }
   } catch (error) {
@@ -64,10 +76,22 @@ export function * flowListDelete(action) {
   }
 }
 
+export function * flowListChooseDir(action) {
+  try {
+    const response = yield call(chooseFir);
+    if (response.code === 1) {
+      yield put({type: 'FLOWLIST_SHOWDIR',dirPath:response.data});
+    }
+  } catch (error) {
+    yield put(fetchFailure());
+  }
+}
+
 export function * watchFlowList() {
   yield takeEvery('FLOWLIST_REQUEST', fetchList)
   yield takeEvery('FLOWLIST_ADD', flowListAdd)
   yield takeEvery('FLOWLIST_EDIT', flowListEdit)
   yield takeEvery('FLOWLIST_SHOW', flowItemShow)
   yield takeEvery('FLOWLIST_DELETE', flowListDelete)
+  yield takeEvery('FLOWLIST_CHOOSEDIR', flowListChooseDir)
 }

@@ -2,7 +2,8 @@ import * as types from '../actions/action-type.js';
 
 const flowlistReducer = function (state = {}, action) {
   const list = action.flowlist;
-  const visible = action.visible;
+  const gitVisible = action.gitVisible;
+  const localVisible = action.localVisible;
   switch (action.type) {
     case types.FLOWLIST_LIST:
       return {
@@ -12,9 +13,23 @@ const flowlistReducer = function (state = {}, action) {
     case types.FLOWLIST_GITMODEL:
       return {
         ...state,
-        isEdit:action.isEdit,
-        data:action.data,
-        visible
+        isEdit: action.isEdit,
+        data: action.data,
+        gitVisible,
+        modalType: action.modalType
+      };
+    case types.FLOWLIST_LOCALMODEL:
+      return {
+        ...state,
+        isEdit: action.isEdit,
+        data: action.data,
+        localVisible,
+        modalType: action.modalType
+      };
+    case types.FLOWLIST_SHOWDIR:
+      return {
+        ...state,
+        dirPath: action.dirPath
       };
     default:
       return state

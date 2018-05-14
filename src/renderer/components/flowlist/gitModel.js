@@ -3,7 +3,7 @@ import {Modal, Form, Input} from 'antd';
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {showModal, addData, editData} from '../../actions/flowList';
+import {showGitModal, addData, editData} from '../../actions/flowList';
 
 const FormItem = Form.Item;
 
@@ -12,7 +12,7 @@ const formItemLayout = {
 				span: 6
 		},
 		wrapperCol: {
-				span: 12
+				span: 16
 		}
 };
 
@@ -30,7 +30,7 @@ const handleOk = (props) => {
 										values:{...values},
 										_id:props.data[0]._id
 									}
-									props.editData(data)
+									props.editData(data,'git')
 								}else{
 									const data = {
 										...values,
@@ -38,14 +38,14 @@ const handleOk = (props) => {
 										type: 'git',
 										isDefault: 0
 									}
-									props.addData(data)
+									props.addData(data,'git')
 								}	
 						}
 				});
 }
 
 const handleCancel = (props) => {
-		props.showModal(false);
+		props.showGitModal(false);
 		props
 				.form
 				.resetFields();
@@ -128,7 +128,7 @@ const GitModel = Form.create({
 
 const mapStateToProps = store => {
 		return {
-			visible: store.flowlist.visible,
+			gitVisible: store.flowlist.gitVisible,
 			data: store.flowlist.data,
 			isEdit:store.flowlist.isEdit
 		};
@@ -136,7 +136,7 @@ const mapStateToProps = store => {
 
 const mapDispatchToProps = dispatch => {
 		return {
-				showModal: bindActionCreators(showModal, dispatch),
+			showGitModal: bindActionCreators(showGitModal, dispatch),
 				addData: bindActionCreators(addData, dispatch),
 				editData: bindActionCreators(editData, dispatch)
 		};
