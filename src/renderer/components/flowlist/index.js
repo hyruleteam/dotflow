@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Button, Table, Avatar, Tag,Popconfirm } from 'antd';
+import { Button, Avatar, Tag,Popconfirm,Card, Col, Row,Spin,Icon,Tooltip } from 'antd';
 
 import MainLayout from '../layout/MainLayout';
 import publicStyles from '../layout/public.less';
+import styles from './index.less';
 import GitModel from "./gitModel";
 import LocalModel from "./localModel";
 
@@ -21,53 +22,54 @@ class FlowList extends Component {
 
   renderActions(isDefault,type,id) {
     if(isDefault === 1){
-      return [<span className={publicStyles['op-list-btn']} key={id+'1'}>创建项目</span>]
+      return [<span><Icon type="plus-circle-o" key={id+'1'}/> 创建项目</span>]
     } else if (isDefault === 0){
-      return [<span className={publicStyles['op-list-btn']} key={id+'1'}>创建项目</span>,
-      <span key={id+'2'} className={publicStyles['op-list-btn']} onClick={() => {this.props.showData(id,type)}}>编辑</span>,
-      <Popconfirm key={id+'3'} placement="topRight" title="确认删除？" onConfirm={() => {this.props.deleteData(id)}} okText="确认" cancelText="取消">
-        <span className={publicStyles['op-list-btn']}>删除</span>
-      </Popconfirm>]
+      return [
+      <Tooltip placement="top" title="创建项目">
+        <Icon type="plus-circle-o" key={id+'1'}/>
+      </Tooltip>,
+      <Tooltip placement="top" title="编辑">
+        <Icon type="edit" key={id+'2'} onClick={() => {this.props.showData(id,type)}}/>
+      </Tooltip>,
+      <Tooltip placement="top" title="删除">
+        <Popconfirm key={id+'3'} placement="topRight" title="确认删除？" onConfirm={() => {this.props.deleteData(id)}} okText="确认" cancelText="取消">
+          <Icon type="delete" key={id+'3'}/>
+        </Popconfirm>
+      </Tooltip>]
     }
   };
 
   render() {
-    const columns = [{
-      title: '图标',
-      key: 'avatar',
-      render: (text, record) => (
-        <Avatar> {
-          record.avatar
-        }</Avatar>
-      ),
-    },{
-      title: '名称',
-      dataIndex: 'name',
-      key: 'name',
-      width: 200,
-    }, {
-      title: '描述',
-      dataIndex: 'description',
-      key: 'description',
-      width: 240,
-    }, {
-      title: '标签',
-      key: 'tags',
-      width: 150,
-      render: (text, record) => (
-        <div>
-          <Tag color="orange">{record.isDefault === 1? '内置': '导入'}</Tag>
-          <Tag color="cyan"> {record.type}</Tag>
-        </div>
-      ),
-    },
-    {
-      title: '操作',
-      key: 'opration',
-      render: (text, record) => (
-        this.renderActions(record.isDefault,record.type,record._id)
-      ),
-    }];
+    const CardList = () => {
+      const { Meta } = Card;
+      if(this.props.flowlist.list){
+        return (
+          <Row gutter={16}>
+            {this.props.flowlist.list.map((item) => {
+              return (
+                <Col span={8} style={{marginBottom:'10px'}} key={item._id}>
+                  <Card title={item.name} loading={this.props.common.status} bordered={false} 
+                  actions={this.renderActions(item.isDefault,item.type,item._id)}
+                  className={styles.card}>
+                  <Meta
+                      avatar={<Avatar>{item.avatar}</Avatar>}
+                      title={<div>
+                        <Tag color="orange">{item.isDefault === 1? '内置': '导入'}</Tag>
+                        <Tag color="cyan"> {item.type}</Tag>
+                      </div>}
+                      description={item.description}
+                    />
+                  </Card>
+                </Col>
+              )
+            })}
+          </Row>
+        )
+      }
+      return (
+        <div></div>
+      )
+    }
 
     return (
       <MainLayout location={this.props.location}>
@@ -85,9 +87,10 @@ class FlowList extends Component {
             onClick={() => {this.props.showGitModal(true)}}>从git repo新增脚手架</Button>
           <Button type="primary" className={publicStyles['op-btn']} icon="upload" ghost onClick={() => {this.props.showLocalModal(true)}}>从本地导入脚手架</Button>
         </div>
-        <div className="m-flow-list">
-        <Table columns={columns} dataSource={this.props.flowlist.list} 
-        loading={this.props.common.status} rowKey={record => record._id} size="middle" pagination={false}/>
+        <div className={styles['m-flow-list']}>
+          <Spin spinning={this.props.common.status}>
+            <CardList/>
+          </Spin>
         </div>
       </MainLayout>
     );

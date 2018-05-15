@@ -73,7 +73,7 @@ class ProjectList extends Component {
           <Button
             type="primary"
             className={publicStyles['op-btn']}
-            icon="upload">新建项目</Button>
+            icon="plus">新建项目</Button>
         </div>
         <div className="m-flow-list">
         <Table columns={columns} dataSource={this.props.projectList.list} 
