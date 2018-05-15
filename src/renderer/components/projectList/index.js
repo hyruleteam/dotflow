@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table,Popconfirm } from 'antd';
+import { Table,Popconfirm,message } from 'antd';
 
 import MainLayout from '../layout/MainLayout';
 import publicStyles from '../layout/public.less';
@@ -33,8 +33,31 @@ class ProjectList extends Component {
     }
   };
 
-  doInitProject(data){
-    initProject.init(data)
+  async doInitProject(data){
+    try{
+      const res = await initProject.checkDirIsEmpty(data)
+      if(res.code === 0){
+        message.error(res.msg);
+      }
+    }catch(e){
+      message.error(e);
+    }
+    
+    if(data.templateData.type === 'git'){
+      try {
+        const gitRes = await initProject.generateByGit()
+        console.log(gitRes);
+      } catch (e) {
+        message.error(e);
+      }
+    }else if(data.templateData.type === 'local'){
+      try {
+        const localRes = await initProject.generateByLocal()
+        console.log(localRes);
+      } catch (e) {
+        message.error(e);
+      }
+    }
   }
 
   render() {
