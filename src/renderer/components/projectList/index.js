@@ -3,6 +3,7 @@ import { Button, Table, Avatar, Tag,Popconfirm } from 'antd';
 
 import MainLayout from '../layout/MainLayout';
 import publicStyles from '../layout/public.less';
+import styles from './index.less';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -31,14 +32,6 @@ class ProjectList extends Component {
 
   render() {
     const columns = [{
-      title: '图标',
-      key: 'avatar',
-      render: (text, record) => (
-        <Avatar> {
-          record.avatar
-        }</Avatar>
-      ),
-    },{
       title: '名称',
       dataIndex: 'name',
       key: 'name',
@@ -49,33 +42,35 @@ class ProjectList extends Component {
       key: 'description',
       width: 240,
     }, {
-      title: '标签',
-      key: 'tags',
+      title: '开发者',
+      key: 'author',
+      dataIndex: 'author',
       width: 150,
-      render: (text, record) => (
-        <div>
-          <Tag color="orange">{record.isDefault === 1? '内置': '导入'}</Tag>
-          <Tag color="cyan"> {record.type}</Tag>
-        </div>
-      ),
     },
     {
       title: '操作',
       key: 'opration',
-      render: (text, record) => (
-        this.renderActions(record.isDefault,record.type,record._id)
-      ),
+      width: 150,
+      render: (text, record) => {
+        if(!record.isInit){
+          return (
+            <div>
+              <span className={publicStyles['op-list-btn']} key={record.id+'1'}>初始化项目</span>
+            </div>
+          )
+        }else{
+          return (
+            <div>
+              <span className={publicStyles['op-list-btn']} key={record.id+'2'}>打开调试窗口</span>
+            </div>
+          )
+        }
+      }
     }];
 
     return (
       <MainLayout location={this.props.location}>
-        <div className="m-flow-op">
-          <Button
-            type="primary"
-            className={publicStyles['op-btn']}
-            icon="plus">新建项目</Button>
-        </div>
-        <div className="m-flow-list">
+        <div className={styles['m-project-list']}>
         <Table columns={columns} dataSource={this.props.projectList.list} 
         loading={this.props.common.status} rowKey={record => record._id} size="middle" pagination={false}/>
         </div>

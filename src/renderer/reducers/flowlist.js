@@ -26,6 +26,12 @@ const flowlistReducer = function (state = {}, action) {
         localVisible,
         modalType: action.modalType
       };
+    case types.FLOWLIST_CREATEMODEL:
+      return {
+        ...state,
+        data: action.data,
+        createVisible:action.createVisible,
+      };
     default:
       return state
   }

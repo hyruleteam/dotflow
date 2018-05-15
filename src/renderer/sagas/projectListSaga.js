@@ -22,11 +22,7 @@ export function * projectAdd(action) {
     const response = yield call(addProject, action.data);
     if (response.code === 1) {
       yield message.success('添加成功', 2);
-      if(action.modalType === 'git'){
-        yield put({type: 'PROJECTLIST_GITMODEL', gitVisible: false});
-      }else{
-        yield put({type: 'PROJECTLIST_LOCALMODEL', localVisible: false});
-      }
+      yield put({type: 'FLOWLIST_CREATEMODEL', createVisible: false});
       yield put({type: 'PROJECTLIST_REQUEST'});
     }
   } catch (error) {

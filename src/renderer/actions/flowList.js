@@ -31,3 +31,7 @@ export function showGitModal(gitVisible,data={},isEdit=false) {
 export function showLocalModal(localVisible,data,isEdit=false,) {
   return { type: types.FLOWLIST_LOCALMODEL, localVisible,data,isEdit};
 }
+
+export function showCreateModal(createVisible,data) {
+  return { type: types.FLOWLIST_CREATEMODEL, createVisible,data};
+}

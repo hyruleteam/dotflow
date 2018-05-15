@@ -6,10 +6,11 @@ import publicStyles from '../layout/public.less';
 import styles from './index.less';
 import GitModel from "./gitModel";
 import LocalModel from "./localModel";
+import CreateModal from "./createModal";
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { fetchList, showGitModal,showLocalModal, showData, deleteData} from '../../actions/flowList';
+import { fetchList, showGitModal,showLocalModal,showCreateModal, showData, deleteData} from '../../actions/flowList';
 
 class FlowList extends Component {
   constructor(props) {
@@ -20,20 +21,20 @@ class FlowList extends Component {
     this.props.fetchList();
   }
 
-  renderActions(isDefault,type,id) {
-    if(isDefault === 1){
-      return [<span><Icon type="plus-circle-o" key={id+'1'}/> 创建项目</span>]
-    } else if (isDefault === 0){
+  renderActions(item) {
+    if(item.isDefault === 1){
+      return [<span onClick={() => {this.props.showCreateModal(true,item)}}><Icon type="plus-circle-o" key={item._id+'1'}/> 创建项目</span>]
+    } else if (item.isDefault === 0){
       return [
-      <Tooltip placement="top" title="创建项目">
-        <Icon type="plus-circle-o" key={id+'1'}/>
+      <Tooltip placement="top" title="使用此脚手架创建项目">
+        <Icon type="plus-circle-o" key={item._id+'1'} onClick={() => {this.props.showCreateModal(true,item)}}/>
       </Tooltip>,
       <Tooltip placement="top" title="编辑">
-        <Icon type="edit" key={id+'2'} onClick={() => {this.props.showData(id,type)}}/>
+        <Icon type="edit" key={item._id+'2'} onClick={() => {this.props.showData(item._id,item.type)}}/>
       </Tooltip>,
       <Tooltip placement="top" title="删除">
-        <Popconfirm key={id+'3'} placement="topRight" title="确认删除？" onConfirm={() => {this.props.deleteData(id)}} okText="确认" cancelText="取消">
-          <Icon type="delete" key={id+'3'}/>
+        <Popconfirm key={item._id+'3'} placement="topRight" title="确认删除？" onConfirm={() => {this.props.deleteData(item._id)}} okText="确认" cancelText="取消">
+          <Icon type="delete" key={item._id+'3'}/>
         </Popconfirm>
       </Tooltip>]
     }
@@ -49,7 +50,7 @@ class FlowList extends Component {
               return (
                 <Col span={8} style={{marginBottom:'10px'}} key={item._id}>
                   <Card title={item.name} loading={this.props.common.status} bordered={false} 
-                  actions={this.renderActions(item.isDefault,item.type,item._id)}
+                  actions={this.renderActions(item)}
                   className={styles.card}>
                   <Meta
                       avatar={<Avatar>{item.avatar}</Avatar>}
@@ -79,6 +80,9 @@ class FlowList extends Component {
       < LocalModel visible = {
         this.props.flowlist.localVisible
       } />
+      < CreateModal visible = {
+        this.props.flowlist.createVisible
+      } history={this.props.history}/>
         <div className="m-flow-op">
           <Button
             type="primary"
@@ -106,6 +110,7 @@ const mapDispatchToProps = dispatch => {
     fetchList: bindActionCreators(fetchList, dispatch),
     showGitModal: bindActionCreators(showGitModal, dispatch),
     showLocalModal: bindActionCreators(showLocalModal, dispatch),
+    showCreateModal: bindActionCreators(showCreateModal, dispatch),
     showData: bindActionCreators(showData, dispatch),
     deleteData:bindActionCreators(deleteData, dispatch)
   };
