@@ -9,8 +9,8 @@ class DefaultRouter extends Component {
   render() {
     return (
       <div>
-        <Route exact path="/" component={FlowList}/>
-        <Route path="/about" component={ProjectList}/>
+        <Route exact path="/" component={ProjectList}/>
+        <Route path="/flowlist" component={FlowList}/>
       </div>
     );
   }

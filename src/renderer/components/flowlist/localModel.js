@@ -56,17 +56,25 @@ const handleOk = (props) => {
 
 const handleCancel = (props) => {
 		props.showLocalModal(false);
-		props
-				.form
-				.resetFields();
+		if (!props.isEdit) {
+				props
+						.form
+						.resetFields();
+		}
 }
 
-const getLocalDirPath = (props) =>{
-	remote.dialog.showOpenDialog({properties: ['openDirectory']},(filePaths) => {
-		props.form.setFieldsValue({
-      localPath: filePaths[0],
-    });
-	})
+const getLocalDirPath = (props) => {
+		remote
+				.dialog
+				.showOpenDialog({
+						properties: ['openDirectory']
+				}, (filePaths) => {
+						if (filePaths) {
+								props
+										.form
+										.setFieldsValue({localPath: filePaths[0]});
+						}
+				})
 }
 
 const LocalModel = Form.create({
@@ -80,9 +88,7 @@ const LocalModel = Form.create({
 						return data;
 				}
 		},
-		// onFieldsChange(props, fields) {
-		// 	console.log('onFieldsChange', data);
-		// }
+		// onFieldsChange(props, fields) { 	console.log('onFieldsChange', data); }
 })((props) => {
 		const {visible, form} = props;
 		const {getFieldDecorator} = form;
@@ -155,7 +161,7 @@ const mapDispatchToProps = dispatch => {
 		return {
 				showLocalModal: bindActionCreators(showLocalModal, dispatch),
 				addData: bindActionCreators(addData, dispatch),
-				editData: bindActionCreators(editData, dispatch),
+				editData: bindActionCreators(editData, dispatch)
 		};
 };
 

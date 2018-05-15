@@ -22,8 +22,8 @@ class MainSidebar extends Component {
           }}
         >
           <SubMenu key="sub1" title={<span><Icon type="user"/>工作流</span>}>
-            <Menu.Item key="/"><Link to="/">脚手架管理</Link></Menu.Item>
-            <Menu.Item key="/about"><Link to="/about">项目管理</Link></Menu.Item>
+            <Menu.Item key="/"><Link to="/">项目管理</Link></Menu.Item>
+            <Menu.Item key="/flowlist"><Link to="/flowlist">脚手架管理</Link></Menu.Item>
           </SubMenu>
         </Menu>
       </Sider>

@@ -1,29 +1,22 @@
-import flowlist from './initData/flowlist';
-
 const {remote} = window.require('electron');
 const {dbstore} = remote.getGlobal('services');
 
-// dbstore.flowList.update({ _id: 'vSD2ifhx0oEmxx8u' }, { $set: { isDefault: 0 } }, function (err, numReplaced) {
-//   // numReplaced = 3
-//   // Field 'system' on Mars, Earth, Jupiter now has value 'solar system'
-// });
-
-export function fetchFlowList() {
+export function fetchProjectList() {
   return new Promise((resolve, reject) => {
     dbstore
-      .flowList
+      .projectList
       .find({}, (err, newDoc) => {
         if (err)
           reject(err);
-          resolve([...flowlist,...newDoc]);
+          resolve([...newDoc]);
       });
   });
 }
 
-export function addFlowList(data){
+export function addProject(data){
   return new Promise((resolve, reject) => {
     dbstore
-      .flowList
+      .projectList
       .insert({...data}, (err, newDoc) => {
         if (err){
           reject(err);
@@ -33,10 +26,10 @@ export function addFlowList(data){
   });
 }
 
-export function showFlowList(id){
+export function showProject(id){
   return new Promise((resolve, reject) => {
     dbstore
-      .flowList
+      .projectList
       .find({_id:id}, (err, docs) => {
         if (err){
           reject(err);
@@ -46,10 +39,10 @@ export function showFlowList(id){
   });
 }
 
-export function editFlowList(data){
+export function editProject(data){
   return new Promise((resolve, reject) => {
     dbstore
-      .flowList
+      .projectList
       .update({_id:data._id},{ $set: { ...data.values } }, (err, numReplaced) => {
         if (err){
           reject(err);
@@ -59,10 +52,10 @@ export function editFlowList(data){
   });
 }
 
-export function deleteFlowList(id){
+export function deleteProject(id){
   return new Promise((resolve, reject) => {
     dbstore
-      .flowList
+      .projectList
       .remove({_id:id},{ }, (err, numRemoved) => {
         if (err){
           reject(err);

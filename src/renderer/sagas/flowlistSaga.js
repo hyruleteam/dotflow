@@ -9,7 +9,9 @@ function fetchFailure() {
 export function * fetchList() {
   try {
     const response = yield call(fetchFlowList);
-    yield put({type: 'FLOWLIST_LIST', flowlist: response});
+    yield put({type: 'LOADING_STATUS', status: true});
+    yield put({type: 'FLOWLIST_LIST', list: response});
+    yield put({type: 'LOADING_STATUS', status: false});
   } catch (error) {
     yield put(fetchFailure());
   }

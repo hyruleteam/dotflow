@@ -25,51 +25,47 @@ const handleOk = (props) => {
 										.name
 										.substring(0, 1)
 										.toUpperCase();
-								if(props.isEdit){
-									const data = {
-										values:{...values},
-										_id:props.data._id
-									}
-									props.editData(data,'git')
-								}else{
-									const data = {
-										...values,
-										avatar: avatar,
-										type: 'git',
-										isDefault: 0
-									}
-									props.addData(data,'git')
-								}	
+								if (props.isEdit) {
+										const data = {
+												values: {
+														...values
+												},
+												_id: props.data._id
+										}
+										props.editData(data, 'git')
+								} else {
+										const data = {
+												...values,
+												avatar: avatar,
+												type: 'git',
+												isDefault: 0
+										}
+										props.addData(data, 'git')
+								}
 						}
 				});
 }
 
 const handleCancel = (props) => {
 		props.showGitModal(false);
-		props
-				.form
-				.resetFields();
+		if (!props.isEdit) {
+				props
+						.form
+						.resetFields();
+		}
 }
 
 const GitModel = Form.create({
-  mapPropsToFields(props) {
-		if(props.isEdit){
-			return {
-				name:Form.createFormField({
-					value: props.data.name,
-				}),
-				description:Form.createFormField({
-					value: props.data.description,
-				}),
-				gitRepo:Form.createFormField({
-					value: props.data.gitRepo,
-				}),
-			};
-		}
-  },
-  // onFieldsChange(props, fields) {
-  //   console.log('onFieldsChange', fields);
-  // },
+		mapPropsToFields(props) {
+				if (props.isEdit) {
+						return {
+								name: Form.createFormField({value: props.data.name}),
+								description: Form.createFormField({value: props.data.description}),
+								gitRepo: Form.createFormField({value: props.data.gitRepo})
+						};
+				}
+		},
+		// onFieldsChange(props, fields) {   console.log('onFieldsChange', fields); },
 })((props) => {
 		const {visible, form} = props;
 		const {getFieldDecorator} = form;
@@ -127,16 +123,12 @@ const GitModel = Form.create({
 })
 
 const mapStateToProps = store => {
-		return {
-			gitVisible: store.flowlist.gitVisible,
-			data: store.flowlist.data,
-			isEdit:store.flowlist.isEdit
-		};
+		return {gitVisible: store.flowlist.gitVisible, data: store.flowlist.data, isEdit: store.flowlist.isEdit};
 };
 
 const mapDispatchToProps = dispatch => {
 		return {
-			showGitModal: bindActionCreators(showGitModal, dispatch),
+				showGitModal: bindActionCreators(showGitModal, dispatch),
 				addData: bindActionCreators(addData, dispatch),
 				editData: bindActionCreators(editData, dispatch)
 		};

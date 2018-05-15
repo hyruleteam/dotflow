@@ -1,11 +1,11 @@
 import * as types from './action-type.js';
 
-export function fetchList(flowlist) {
-  return {type: types.FLOWLIST_REQUEST, flowlist};
+export function fetchList(list=[]) {
+  return {type: types.FLOWLIST_REQUEST, list};
 }
 
-export function showList(flowlist) {
-  return {type: types.FLOWLIST_LIST, flowlist};
+export function showList(list=[]) {
+  return {type: types.FLOWLIST_LIST, list};
 }
 
 export function addData(data,modalType) {
