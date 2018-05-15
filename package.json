@@ -62,7 +62,7 @@
   "scripts": {
     "postinstall": "cd app && tnpm i && cd .. && npm run rebuild",
     "start": "concurrently \"node scripts/start.js\" \"npm run build:electron\"",
-    "start:electron": "electron app/dist/main",
+    "start:electron": "electron app/dist/main --debug=5500",
     "build": "node scripts/build.js",
     "build:electron": "node scripts/electron.js",
     "rebuild": "electron-rebuild ./app",

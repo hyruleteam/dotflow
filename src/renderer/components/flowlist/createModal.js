@@ -64,7 +64,7 @@ const getLocalDirPath = (props) => {
 }
 
 const CreateModal = Form.create()((props) => {
-		const {visible, form, data} = props;
+		const {visible, form} = props;
 		const {getFieldDecorator} = form;
 		return (
 				<div>

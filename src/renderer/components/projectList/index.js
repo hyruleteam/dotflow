@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Table, Avatar, Tag,Popconfirm } from 'antd';
+import { Table,Popconfirm } from 'antd';
 
 import MainLayout from '../layout/MainLayout';
 import publicStyles from '../layout/public.less';
@@ -8,6 +8,9 @@ import styles from './index.less';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchList, showLocalModal, showData, deleteData} from '../../actions/projectList';
+
+const {remote} = window.require('electron');
+const {initProject} = remote.getGlobal('services');
 
 class ProjectList extends Component {
   constructor(props) {
@@ -29,6 +32,10 @@ class ProjectList extends Component {
       </Popconfirm>]
     }
   };
+
+  doInitProject(data){
+    initProject.init(data)
+  }
 
   render() {
     const columns = [{
@@ -55,7 +62,7 @@ class ProjectList extends Component {
         if(!record.isInit){
           return (
             <div>
-              <span className={publicStyles['op-list-btn']} key={record.id+'1'}>初始化项目</span>
+              <span className={publicStyles['op-list-btn']} key={record.id+'1'} onClick={() => {this.doInitProject(record)}}>初始化项目</span>
             </div>
           )
         }else{

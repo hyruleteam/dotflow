@@ -24,5 +24,7 @@ module.exports = {
       }
     ]
   },
-  plugins: [new webpack.DefinePlugin({$dirname: '__dirname'})]
+  plugins: [
+    new webpack.DefinePlugin({$dirname: '__dirname'})
+  ]
 };
