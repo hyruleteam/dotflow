@@ -12,10 +12,6 @@ import { fetchList, showLocalModal, showData, deleteData} from '../../actions/pr
 const {remote,ipcRenderer} = window.require('electron');
 const {initProject} = remote.getGlobal('services');
 
-ipcRenderer.on('ping', (event, arg) => {
-  console.log(arg) // prints "pong"
-})
-
 class ProjectList extends Component {
   constructor(props) {
     super(props);
@@ -38,64 +34,61 @@ class ProjectList extends Component {
   };
 
   async doInitProject(data){
-    // try{
-    //   const res = await initProject.checkDirExists(data)
-    //   console.log(res)
-    //   if(res.code === 0){
-    //     message.error(res.msg);
-    //     return;
-    //   }
-    // }catch(e){
-    //   message.error(e.msg);
-    //   return;
-    // }
+    try{
+      const res = await initProject.checkDirExists(data)
+      console.log(res)
+      if(res.code === 0){
+        message.error(res.msg);
+        return;
+      }
+    }catch(e){
+      message.error(e.msg);
+      return;
+    }
 
     if(data.templateData.type === 'git'){
-      // console.log('开始clone模版')
-      // try {
-      //   console.log('正在clone模版')
-      //   const gitRes = await initProject.generateByGit(data)
-      //   if(gitRes.code === 0){
-      //     console.log('clone失败')
-      //     message.error(gitRes.msg);
-      //     return;
-      //   }
-      //   console.log('clone成功')
-      // } catch (e) {
-      //   message.error(e);
-      //   return;
-      // }
+      console.log('开始clone模版')
+      try {
+        console.log('正在clone模版')
+        const gitRes = await initProject.generateByGit(data)
+        if(gitRes.code === 0){
+          console.log('clone失败')
+          message.error(gitRes.msg);
+          return;
+        }
+        console.log('clone成功')
+      } catch (e) {
+        message.error(e);
+        return;
+      }
 
-      // console.log('开始清除git信息')
-      // try {
-      //   console.log('正在清除git信息')
-      //   const gitRes = await initProject.cleanGitFile(data)
-      //   if(gitRes.code === 0){
-      //     console.log('清除git信息失败')
-      //     message.error(gitRes.msg);
-      //     return;
-      //   }
-      //   console.log('清除git信息成功')
-      // } catch (e) {
-      //   message.error(e);
-      // }
+      console.log('开始清除git信息')
+      try {
+        console.log('正在清除git信息')
+        const gitRes = await initProject.cleanGitFile(data)
+        if(gitRes.code === 0){
+          console.log('清除git信息失败')
+          message.error(gitRes.msg);
+          return;
+        }
+        console.log('清除git信息成功')
+      } catch (e) {
+        message.error(e);
+      }
 
-      // console.log('开始生成项目信息')
-      // try {
-      //   console.log('正在生成项目信息')
-      //   const gitRes = await initProject.generatePackageJson(data)
-      //   if(gitRes.code === 0){
-      //     console.log('生成项目信息失败')
-      //     message.error(gitRes.msg);
-      //     return;
-      //   }
-      //   console.log('生成项目信息成功')
-      // } catch (e) {
-      //   message.error(e);
-      // }
-
-      const gitRes = await initProject.runNpm(data)
-      // console.log(gitRes)
+      console.log('开始生成项目信息')
+      try {
+        console.log('正在生成项目信息')
+        const gitRes = await initProject.generatePackageJson(data)
+        if(gitRes.code === 0){
+          console.log('生成项目信息失败')
+          message.error(gitRes.msg);
+          return;
+        }
+        console.log('生成项目信息成功')
+      } catch (e) {
+        message.error(e);
+      }
 
     }else if(data.templateData.type === 'local'){
       try {

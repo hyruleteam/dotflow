@@ -1,6 +1,6 @@
 import {join} from 'path';
 import is from 'electron-is';
-import {app, dialog, ipcMain,BrowserWindow} from 'electron';
+import {app, dialog} from 'electron';
 import log from 'electron-log';
 
 const fs = require('fs');
@@ -123,26 +123,16 @@ export async function generatePackageJson(data){
   });
 }
 
-// ipcMain.on('asynchronous-message', (event, arg) => {
-//   console.log(arg) // prints "ping"
-//   // ls.stdout.on('data', function (stdoutData) {
-//   //   console.log(stdoutData.toString())
-//   //   event.sender.send('asynchronous-reply', stdoutData.toString())
-//   // })
-// })
-
-// global.services.application.emit('asynchronous-reply','123123213')
-
 //npm 安装
 export async function runNpm(data){
   const projectDir = `${data.localPath}/${data.name}`;
   log.info("开始npm 安装")
   return new Promise(function (resolve, reject) {
-    const ls = spawn('gulp',{cwd: projectDir});
-      ls.stdout.on('data', function (stdoutData) {
-        console.log(stdoutData.toString())
-        global.win.webContents.send('ping',stdoutData.toString())
-      })
+    const ls = spawn('npm',['install'],{cwd: projectDir});
+
+    ls.stdout.on('data', function (data) {
+      console.log('stdout: ' + data)
+    })
     ls.stderr.on('data', function (err) {
       console.log('stderr: ' + err)
     })
@@ -151,6 +141,24 @@ export async function runNpm(data){
     })
   });
 }
+
+// export async function runNpm(data){
+//   const projectDir = `${data.localPath}/${data.name}`;
+//   log.info("开始npm 安装")
+//   return new Promise(function (resolve, reject) {
+//     const ls = spawn('gulp',{cwd: projectDir});
+//       ls.stdout.on('data', function (stdoutData) {
+//         console.log(stdoutData.toString())
+//         global.win.webContents.send('ping',stdoutData.toString())
+//       })
+//     ls.stderr.on('data', function (err) {
+//       console.log('stderr: ' + err)
+//     })
+//     ls.once('close', function () {
+//       console.log('install success...')
+//     })
+//   });
+// }
 
 export function init(data) {
   initpj.checkDirIsEmpty(data)
