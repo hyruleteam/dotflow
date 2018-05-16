@@ -2,20 +2,28 @@ import * as types from '../actions/action-type.js';
 
 const projectListReducer = function (state = {}, action) {
   const list = action.list;
-  const localVisible = action.localVisible;
+  const initVisible = action.initVisible;
   switch (action.type) {
     case types.PROJECTLIST_LIST:
       return {
         ...state,
         list
       };
-    case types.PROJECTLIST_LOCALMODEL:
+    case types.PROJECTLIST_INITMODAL:
       return {
         ...state,
-        isEdit: action.isEdit,
-        data: action.data,
-        localVisible,
-        modalType: action.modalType
+        data:action.data,
+        initVisible
+      };
+    case types.PROJECTLIST_INITMODELCONFIRM:
+      return {
+        ...state,
+        status: action.status
+      };
+    case types.PROJECTLIST_SHOWINITINFO:
+      return {
+        ...state,
+        info: action.info
       };
     default:
       return state

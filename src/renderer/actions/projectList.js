@@ -24,6 +24,14 @@ export function deleteData(id) {
   return {type: types.PROJECTLIST_DELETE, id};
 }
 
-export function showLocalModal(localVisible,data,isEdit=false,) {
-  return { type: types.PROJECTLIST_LOCALMODEL, localVisible,data,isEdit};
+export function showInitModal(initVisible,data) {
+  return { type: types.PROJECTLIST_INITMODAL, initVisible,data};
+}
+
+export function showInitModalConfirm(status) {
+  return { type: types.PROJECTLIST_INITMODELCONFIRM, status};
+}
+
+export function showInitInfo(info="") {
+  return { type: types.PROJECTLIST_SHOWINITINFO, info};
 }

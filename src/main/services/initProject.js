@@ -37,7 +37,7 @@ export function checkDirExists(data) {
       if (!stats) {
         resolve({code: 1, msg: '文件夹不存在'})
       } else {
-        resolve({code: 0, msg: '文件夹已存在'})
+        reject({code: 0, msg: '文件夹已存在'})
       }
     });
   });
@@ -60,7 +60,7 @@ export async function generateByGit(data){
       log.info("开始clone模版")
       exec(`git clone ${tmpInfo.tempURL} ${data.name}`,{cwd: data.localPath}, (err, out) => {
         if (err) {
-          reject({code: 1, msg: err});
+          reject({code: 0, msg: err});
         } else {
           log.info("clone成功")
           resolve({code: 1, msg: 'clone成功'})
@@ -78,7 +78,7 @@ export function cleanGitFile(data){
     if(os.platform() === 'darwin'){
       exec(`rm -rf .git`,{cwd: projectDir}, (err, out) => {
         if (err) {
-          reject({code: 1, msg: err});
+          reject({code: 0, msg: err});
         } else {
           log.info("清除成功！")
           resolve({code: 1, msg: '清除成功！'})
@@ -87,7 +87,7 @@ export function cleanGitFile(data){
     }else if(os.platform() === 'win32'){
       exec('rd/s/q .git',{cwd: projectDir}, (err, out) => {
         if (err) {
-          reject({code: 1, msg: err});
+          reject({code: 0, msg: err});
         } else {
           log.info("清除成功！")
           resolve({code: 1, msg: '清除成功！'})
@@ -108,14 +108,14 @@ export async function generatePackageJson(data){
   log.info("开始替换package.json模版")
   return new Promise(function (resolve, reject) {
     fs.readFile(jsonFile, 'utf8', (err, fileinfo) => {
-        if (err) resolve({code: 1, msg: '文件不存在'})
+        if (err) reject({code: 1, msg: '文件不存在'})
 
         let newData = fileinfo.replace(/<%= name %>/,data.name)
         .replace(/<%= description %>/,data.description)
         .replace(/<%= author %>/,data.author)
 
         fs.writeFile(jsonFile, newData, (err) => {
-            if (err) resolve({code: 1, msg: '文件不存在'})
+            if (err) reject({code: 1, msg: '文件不存在'})
             log.info('替换成功！')
             resolve({code: 1, msg: '替换成功！'})
         });
@@ -128,17 +128,14 @@ export async function runNpm(data){
   const projectDir = `${data.localPath}/${data.name}`;
   log.info("开始npm 安装")
   return new Promise(function (resolve, reject) {
-    const ls = spawn('npm',['install'],{cwd: projectDir});
-
-    ls.stdout.on('data', function (data) {
-      console.log('stdout: ' + data)
-    })
-    ls.stderr.on('data', function (err) {
-      console.log('stderr: ' + err)
-    })
-    ls.once('close', function () {
-      console.log('install success...')
-    })
+    exec('npm install',{cwd: projectDir},(err,out) => {
+      if (err) {
+        reject({code: 0, msg: err});
+      } else {
+        log.info("安装成功！")
+        resolve({code: 1, msg: out})
+      }
+    });
   });
 }
 

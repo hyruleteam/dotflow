@@ -1,16 +1,26 @@
 import React, { Component } from 'react';
-import { Table,Popconfirm,message,Spin } from 'antd';
+import { Table,Popconfirm,message } from 'antd';
 
 import MainLayout from '../layout/MainLayout';
 import publicStyles from '../layout/public.less';
 import styles from './index.less';
+import InitModal from "./initModal";
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { fetchList, showLocalModal, showData, deleteData} from '../../actions/projectList';
+import { fetchList, showInitModal, showData, deleteData} from '../../actions/projectList';
 
-const {remote,ipcRenderer} = window.require('electron');
-const {initProject} = remote.getGlobal('services');
+// const childProcess = window.require('child_process');
+
+// let child = childProcess.exec('gulp');
+
+// child.stderr.on('data', function (err) {
+//   console.log('stderr: ' + err)
+// })
+
+// child.stdout.on('data', function (data) {
+//   console.log('stdout: ' + data)
+// })
 
 class ProjectList extends Component {
   constructor(props) {
@@ -32,72 +42,6 @@ class ProjectList extends Component {
       </Popconfirm>]
     }
   };
-
-  async doInitProject(data){
-    try{
-      const res = await initProject.checkDirExists(data)
-      console.log(res)
-      if(res.code === 0){
-        message.error(res.msg);
-        return;
-      }
-    }catch(e){
-      message.error(e.msg);
-      return;
-    }
-
-    if(data.templateData.type === 'git'){
-      console.log('开始clone模版')
-      try {
-        console.log('正在clone模版')
-        const gitRes = await initProject.generateByGit(data)
-        if(gitRes.code === 0){
-          console.log('clone失败')
-          message.error(gitRes.msg);
-          return;
-        }
-        console.log('clone成功')
-      } catch (e) {
-        message.error(e);
-        return;
-      }
-
-      console.log('开始清除git信息')
-      try {
-        console.log('正在清除git信息')
-        const gitRes = await initProject.cleanGitFile(data)
-        if(gitRes.code === 0){
-          console.log('清除git信息失败')
-          message.error(gitRes.msg);
-          return;
-        }
-        console.log('清除git信息成功')
-      } catch (e) {
-        message.error(e);
-      }
-
-      console.log('开始生成项目信息')
-      try {
-        console.log('正在生成项目信息')
-        const gitRes = await initProject.generatePackageJson(data)
-        if(gitRes.code === 0){
-          console.log('生成项目信息失败')
-          message.error(gitRes.msg);
-          return;
-        }
-        console.log('生成项目信息成功')
-      } catch (e) {
-        message.error(e);
-      }
-
-    }else if(data.templateData.type === 'local'){
-      try {
-        const localRes = await initProject.generateByLocal(data)
-      } catch (e) {
-        message.error(e);
-      }
-    }
-  }
 
   render() {
     const columns = [{
@@ -124,7 +68,7 @@ class ProjectList extends Component {
         if(!record.isInit){
           return (
             <div>
-              <span className={publicStyles['op-list-btn']} key={record.id+'1'} onClick={() => {this.doInitProject(record)}}>初始化项目</span>
+              <span className={publicStyles['op-list-btn']} key={record.id+'1'} onClick={() => {this.props.showInitModal(true,record)}}>初始化项目</span>
             </div>
           )
         }else{
@@ -139,6 +83,9 @@ class ProjectList extends Component {
 
     return (
       <MainLayout location={this.props.location}>
+        <InitModal visible = {
+          this.props.projectList.initVisible
+        } />
         <div className={styles['m-project-list']}>
         <Table columns={columns} dataSource={this.props.projectList.list} 
         loading={this.props.common.status} rowKey={record => record._id} size="middle" pagination={false}/>
@@ -155,7 +102,7 @@ const mapStateToProps = store => {
 const mapDispatchToProps = dispatch => {
   return {
     fetchList: bindActionCreators(fetchList, dispatch),
-    showLocalModal: bindActionCreators(showLocalModal, dispatch),
+    showInitModal: bindActionCreators(showInitModal, dispatch),
     showData: bindActionCreators(showData, dispatch),
     deleteData:bindActionCreators(deleteData, dispatch)
   };
