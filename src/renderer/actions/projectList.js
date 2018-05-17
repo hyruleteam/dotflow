@@ -35,3 +35,7 @@ export function showInitModalConfirm(status) {
 export function showInitInfo(info="") {
   return { type: types.PROJECTLIST_SHOWINITINFO, info};
 }
+
+export function initComplete(data) {
+  return { type: types.PROJECTLIST_INITCOMPLETE, data};
+}

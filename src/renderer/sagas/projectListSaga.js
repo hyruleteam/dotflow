@@ -1,6 +1,6 @@
-import {call, put, takeEvery} from 'redux-saga/effects'
-import {fetchProjectList, addProject, showProject, editProject, deleteProject} from '../api/projectList';
-import {message} from 'antd';
+import { call, put, takeEvery } from 'redux-saga/effects'
+import { fetchProjectList, addProject, showProject, editProject, deleteProject, changeStatus } from '../api/projectList';
+import { message } from 'antd';
 
 function fetchFailure() {
   message.error('操作失败', 2);
@@ -74,10 +74,24 @@ export function * projectDelete(action) {
   }
 }
 
+export function * projectInitComplete(action) {
+  try {
+    console.log(action.data)
+    const response = yield call(changeStatus, action.data);
+    if (response.code === 1) {
+      // yield put({type: 'PROJECTLIST_INITMODAL',initVisible:false});
+      yield put({type: 'PROJECTLIST_REQUEST'});
+    }
+  } catch (error) {
+    yield put(fetchFailure());
+  }
+}
+
 export function * watchProjectList() {
   yield takeEvery('PROJECTLIST_REQUEST', fetchList)
   yield takeEvery('PROJECTLIST_ADD', projectAdd)
   yield takeEvery('PROJECTLIST_EDIT', projectEdit)
   yield takeEvery('PROJECTLIST_SHOW', projectShow)
   yield takeEvery('PROJECTLIST_DELETE', projectDelete)
+  yield takeEvery('PROJECTLIST_INITCOMPLETE', projectInitComplete)
 }

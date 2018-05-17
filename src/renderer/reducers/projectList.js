@@ -12,7 +12,7 @@ const projectListReducer = function (state = {}, action) {
     case types.PROJECTLIST_INITMODAL:
       return {
         ...state,
-        data:action.data,
+        data: action.data,
         initVisible
       };
     case types.PROJECTLIST_INITMODELCONFIRM:

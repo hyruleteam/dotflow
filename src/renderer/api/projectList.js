@@ -64,3 +64,16 @@ export function deleteProject(id){
       });
   });
 }
+
+export function changeStatus(data){
+  return new Promise((resolve, reject) => {
+    dbstore
+      .projectList
+      .update({_id:data._id},{ $set: { isInit:data.isInit } }, (err, numReplaced) => {
+        if (err){
+          reject(err);
+        }
+        resolve({code:1,data:{...numReplaced}});
+      });
+  });
+}

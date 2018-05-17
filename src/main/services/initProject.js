@@ -49,22 +49,21 @@ export async function generateByGit(data){
   const reg = /\.git$/;
   const file_name= /(.*\/)*([^.]+).*/ig;
   if(tmpInfo.type === 'git'){
-    if(!reg.test(tmpInfo.tempURL)){
-      return {
-        code:0,
-        msg:'不是正确的git地址'
-      }
-    }
-
     return new Promise(function (resolve, reject) {
+      if(!reg.test(tmpInfo.tempURL)){
+        reject({
+          code:0,
+          msg:'不是正确的git地址'
+        })
+        return;
+      }
       log.info("开始clone模版")
       exec(`git clone ${tmpInfo.tempURL} ${data.name}`,{cwd: data.localPath}, (err, out) => {
         if (err) {
           reject({code: 0, msg: err});
-        } else {
-          log.info("clone成功")
-          resolve({code: 1, msg: 'clone成功'})
         }
+        log.info("clone成功")
+        resolve({code: 1, msg: 'clone成功'})
       });
     });
   }

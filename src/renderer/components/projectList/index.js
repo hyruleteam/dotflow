@@ -31,18 +31,6 @@ class ProjectList extends Component {
     this.props.fetchList();
   }
 
-  renderActions(isDefault,type,id) {
-    if(isDefault === 1){
-      return [<span className={publicStyles['op-list-btn']} key={id+'1'}>创建项目</span>]
-    } else if (isDefault === 0){
-      return [<span className={publicStyles['op-list-btn']} key={id+'1'}>创建项目</span>,
-      <span key={id+'2'} className={publicStyles['op-list-btn']} onClick={() => {this.props.showData(id,type)}}>编辑</span>,
-      <Popconfirm key={id+'3'} placement="topRight" title="确认删除？" onConfirm={() => {this.props.deleteData(id)}} okText="确认" cancelText="取消">
-        <span className={publicStyles['op-list-btn']}>删除</span>
-      </Popconfirm>]
-    }
-  };
-
   render() {
     const columns = [{
       title: '名称',
@@ -68,13 +56,19 @@ class ProjectList extends Component {
         if(!record.isInit){
           return (
             <div>
-              <span className={publicStyles['op-list-btn']} key={record.id+'1'} onClick={() => {this.props.showInitModal(true,record)}}>初始化项目</span>
+              <span className={publicStyles['op-list-btn']} key={record._id+'1'} onClick={() => {this.props.showInitModal(true,record)}}>初始化项目</span>
+              <Popconfirm key={record._id+'3'} placement="topRight" title="确认删除？" onConfirm={() => {this.props.deleteData(record._id)}} okText="确认" cancelText="取消">
+                <span className={publicStyles['op-list-btn']}>删除</span>
+              </Popconfirm>
             </div>
           )
         }else{
           return (
             <div>
-              <span className={publicStyles['op-list-btn']} key={record.id+'2'}>打开调试窗口</span>
+              <span className={publicStyles['op-list-btn']} key={record._id+'2'}>打开调试窗口</span>
+              <Popconfirm key={record._id+'3'} placement="topRight" title="确认删除？" onConfirm={() => {this.props.deleteData(record._id)}} okText="确认" cancelText="取消">
+                <span className={publicStyles['op-list-btn']}>删除</span>
+              </Popconfirm>
             </div>
           )
         }

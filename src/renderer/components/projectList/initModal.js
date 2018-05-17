@@ -2,22 +2,18 @@ import React from 'react';
 import {
 		Modal,
 		Form,
-		Input,
-		Button,
 		Radio,
-		Spin,
 		message
 } from 'antd';
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {showInitModal,showInitInfo,showInitModalConfirm} from '../../actions/projectList';
+import {showInitModal,showInitInfo,showInitModalConfirm,initComplete} from '../../actions/projectList';
 import styles from './index.less';
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
-const { TextArea } = Input;
-const {remote,ipcRenderer} = window.require('electron');
+const {remote} = window.require('electron');
 const {initProject} = remote.getGlobal('services');
 
 const failedStatus = {loading:false,okText:'开始'}
@@ -66,7 +62,7 @@ const showLine = (info,props,type) => {
 const doInitProject = async (data,props) => {
 	//判断是否是空文件夹
 	try{
-		const res = await initProject.checkDirExists(data)
+		await initProject.checkDirExists(data)
 	}catch(e){
 		showLine('文件夹已经存在，请删除文件夹',props,'error')
 		props.showInitModalConfirm(failedStatus)
@@ -78,11 +74,11 @@ const doInitProject = async (data,props) => {
 		showLine('====开始clone git模版====',props)
 		try {
 			showLine('正在clone git模版',props)
-			const gitRes = await initProject.generateByGit(data)
+			await initProject.generateByGit(data)
 			showLine('clone git模版成功',props,'success')
 		} catch (e) {
 			showLine('clone git模版失败！请检查git是否配置正确',props,'error')
-				props.showInitModalConfirm(failedStatus)
+			props.showInitModalConfirm(failedStatus)
 			showLine(e.msg,props,'error')
 			return;
 		}
@@ -91,23 +87,25 @@ const doInitProject = async (data,props) => {
 		showLine('====开始清除模版信息====',props)
 		try {
 			showLine('正在清除模版信息',props)
-			const gitRes = await initProject.cleanGitFile(data)
+			await initProject.cleanGitFile(data)
 			showLine('清除模版信息成功',props,'success')
 		} catch (e) {
 			props.showInitModalConfirm(failedStatus)
 			showLine('清除模版信息失败',props,'error')
 			showLine(e.msg,props,'error')
+			return;
 		}
 
 		//生成项目信息
 		showLine('====开始生成项目信息====',props)
 		try {
 			showLine('正在生成项目信息',props)
-			const gitRes = await initProject.generatePackageJson(data)
+			await initProject.generatePackageJson(data)
 			showLine('生成项目信息成功',props,'success')
 		} catch (e) {
 			props.showInitModalConfirm(failedStatus)
 			showLine(e.msg,props,'error')
+			return;
 		}
 
 		//根据选择触发安装模式
@@ -119,13 +117,17 @@ const doInitProject = async (data,props) => {
 			showLine('安装依赖成功',props,'success')
 		} catch (e) {
 			showLine(e.msg,props,'error')
+			return;
 		}
 
-		props.showInitModalConfirm({loading:false,okText:'初始化完成'})
+		props.showInitModalConfirm({loading:false,okText:'初始化完成'});
+
+		data.isInit = true;
+		props.initComplete(data);
 
 	}else if(data.templateData.type === 'local'){
 		try {
-			const localRes = await initProject.generateByLocal(data)
+			await initProject.generateByLocal(data)
 		} catch (e) {
 			message.error(e);
 		}
@@ -184,6 +186,7 @@ const mapDispatchToProps = dispatch => {
 			showInitModal: bindActionCreators(showInitModal, dispatch),
 			showInitModalConfirm:bindActionCreators(showInitModalConfirm, dispatch),
 			showInitInfo:bindActionCreators(showInitInfo, dispatch),
+			initComplete:bindActionCreators(initComplete, dispatch),
 		};
 };
 
