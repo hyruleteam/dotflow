@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table,Popconfirm,message } from 'antd';
+import { Table,Popconfirm } from 'antd';
 
 import MainLayout from '../layout/MainLayout';
 import publicStyles from '../layout/public.less';

@@ -1,8 +1,8 @@
 {
   "name": "dotflow",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "productName": "dotflow",
-  "description": "Yet another boilerplate for dva.",
+  "description": "前端工作平台",
   "main": "dist/main.js",
   "homepage": "./",
   "author": {
@@ -13,6 +13,8 @@
     "electron-config": "^0.2.1",
     "electron-is": "^2.3.0",
     "electron-log": "^1.2.2",
-    "nedb": "1.8.0"
+    "nedb": "1.8.0",
+    "babel-runtime": "6.26.0",
+    "babel-plugin-transform-runtime": "6.23.0"
   }
 }
