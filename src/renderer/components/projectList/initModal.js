@@ -158,10 +158,10 @@ const doInitProject = async (data,props) => {
 	}else if(data.templateData.type === 'local'){
 		try{
 			await dirIsExist(data,props)
-			await copyLocalTpl(data,props)
-			await generatePackageJson(data,props)
-			await installDependencies(data,props)
-			await doInitComplete(data,props)
+			// await copyLocalTpl(data,props)
+			// await generatePackageJson(data,props)
+			// await installDependencies(data,props)
+			// await doInitComplete(data,props)
 		}catch(e){
 			showLine(e,props,'error')
 			return
