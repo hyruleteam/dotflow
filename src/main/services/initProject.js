@@ -4,6 +4,7 @@ import {app, dialog} from 'electron';
 import log from 'electron-log';
 
 const fs = require('fs');
+const fse = require('fs-extra')
 const os = require('os');
 const exec = require('child_process').exec;
 const spawn = require('child_process').spawn;
@@ -98,7 +99,23 @@ export function cleanGitFile(data){
 
 //本地生成文件
 export async function generateByLocal(data){
-  
+  const tmpInfo = data.templateData;
+  const targetDir = `${data.localPath}/${data.name}`;
+  if(tmpInfo.type === 'local'){
+    return new Promise(function (resolve, reject) {
+      fse.copy(tmpInfo.localPath, targetDir, err => {
+        if (err) {
+          reject({
+            code:0,
+            msg:err
+          })
+          return;
+        }
+        log.info("复制成功")
+        resolve({code: 1, msg: '复制成功'})
+      })
+    });
+  }
 }
 
 //替换package.json模版
@@ -106,19 +123,19 @@ export async function generatePackageJson(data){
   const jsonFile = `${data.localPath}/${data.name}/package.json`;
   log.info("开始替换package.json模版")
   return new Promise(function (resolve, reject) {
-    fs.readFile(jsonFile, 'utf8', (err, fileinfo) => {
-        if (err) reject({code: 1, msg: '文件不存在'})
+    const {name,description,author} = data;
+    fse.readJson(jsonFile, (err, packageObj) => {
+      if (err) reject({code: 1, msg: err})
+      packageObj.name = data.name;
+      packageObj.description = data.description;
+      packageObj.author = data.author;
 
-        let newData = fileinfo.replace(/<%= name %>/,data.name)
-        .replace(/<%= description %>/,data.description)
-        .replace(/<%= author %>/,data.author)
-
-        fs.writeFile(jsonFile, newData, (err) => {
-            if (err) reject({code: 1, msg: '文件不存在'})
-            log.info('替换成功！')
-            resolve({code: 1, msg: '替换成功！'})
-        });
-    });
+      fse.writeJson(jsonFile, packageObj, err => {
+        if (err) reject({code: 1, msg: err})
+        log.info('替换成功！')
+        resolve({code: 1, msg: '替换成功！'})
+      })
+    })
   });
 }
 

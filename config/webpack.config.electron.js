@@ -20,15 +20,7 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: 'babel-loader',
-        options:{
-          "plugins": [
-            ["transform-runtime", {
-              "polyfill": false,
-              "regenerator": true
-            }]
-          ]
-        }
+        use: 'babel-loader'
       }
     ]
   },

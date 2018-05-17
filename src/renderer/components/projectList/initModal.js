@@ -59,77 +59,112 @@ const showLine = (info,props,type) => {
 	props.showInitInfo(lineInfo)
 }
 
-const doInitProject = async (data,props) => {
+const dirIsExist = async (data,props) => {
 	//判断是否是空文件夹
 	try{
 		await initProject.checkDirExists(data)
 	}catch(e){
-		showLine('文件夹已经存在，请删除文件夹',props,'error')
 		props.showInitModalConfirm(failedStatus)
-		return;
+		throw(e.msg)
 	}
+}
 
+const copyLocalTpl = async (data,props) => {
+	//复制模版
+	try {
+		showLine('====开始复制模版====',props)
+		await initProject.generateByLocal(data)
+		showLine('复制模版成功',props,'success')
+	} catch (e) {
+		props.showInitModalConfirm(failedStatus)
+		throw(e.msg)
+	}
+}
+
+const copyGitTpl = async (data,props) => {
+	//clone git模版
+	showLine('====开始clone git模版====',props)
+	try {
+		showLine('正在clone git模版',props)
+		await initProject.generateByGit(data)
+		showLine('clone git模版成功',props,'success')
+	} catch (e) {
+		showLine('clone git模版失败！请检查git是否配置正确',props,'error')
+		props.showInitModalConfirm(failedStatus)
+		throw(e.msg)
+	}
+}
+
+const removeGitInfo = async(data,props) => {
+	//清除模版信息
+	showLine('====开始清除模版信息====',props)
+	try {
+		showLine('正在清除模版信息',props)
+		await initProject.cleanGitFile(data)
+		showLine('清除模版信息成功',props,'success')
+	} catch (e) {
+		showLine('清除模版信息失败',props,'error')
+		props.showInitModalConfirm(failedStatus)
+		throw(e.msg)
+	}
+}
+
+const generatePackageJson = async (data,props) => {
+	//生成项目信息
+	showLine('====开始生成项目信息====',props)
+	try {
+		showLine('正在生成项目信息',props)
+		await initProject.generatePackageJson(data)
+		showLine('生成项目信息成功',props,'success')
+	} catch (e) {
+		props.showInitModalConfirm(failedStatus)
+		throw(e.msg)
+	}
+}
+
+const installDependencies = async (data,props) => {
+	//根据选择触发安装模式
+	showLine('====开始安装依赖====',props)
+	try {
+		showLine('正在安装依赖，时间较长，请耐心等待',props)
+		const gitRes = await initProject.runNpm(data)
+		showLine(gitRes.msg,props,'success')
+		showLine('安装依赖成功',props,'success')
+	} catch (e) {
+		props.showInitModalConfirm(failedStatus)
+		throw(e.msg)
+	}
+}
+
+const doInitComplete = async (data,props) => {
+	props.showInitModalConfirm({loading:false,okText:'初始化完成'});
+	data.isInit = true;
+	props.initComplete(data);
+}
+
+const doInitProject = async (data,props) => {
 	if(data.templateData.type === 'git'){
-		//clone git模版
-		showLine('====开始clone git模版====',props)
-		try {
-			showLine('正在clone git模版',props)
-			await initProject.generateByGit(data)
-			showLine('clone git模版成功',props,'success')
-		} catch (e) {
-			showLine('clone git模版失败！请检查git是否配置正确',props,'error')
-			props.showInitModalConfirm(failedStatus)
-			showLine(e.msg,props,'error')
+		try{
+			await dirIsExist(data,props)
+			await copyGitTpl(data,props)
+			await removeGitInfo(data,props)
+			await generatePackageJson(data,props)
+			await installDependencies(data,props)
+			await doInitComplete(data,props)
+		}catch(e){
+			showLine(e,props,'error')
 			return;
 		}
-
-		//清除模版信息
-		showLine('====开始清除模版信息====',props)
-		try {
-			showLine('正在清除模版信息',props)
-			await initProject.cleanGitFile(data)
-			showLine('清除模版信息成功',props,'success')
-		} catch (e) {
-			props.showInitModalConfirm(failedStatus)
-			showLine('清除模版信息失败',props,'error')
-			showLine(e.msg,props,'error')
-			return;
-		}
-
-		//生成项目信息
-		showLine('====开始生成项目信息====',props)
-		try {
-			showLine('正在生成项目信息',props)
-			await initProject.generatePackageJson(data)
-			showLine('生成项目信息成功',props,'success')
-		} catch (e) {
-			props.showInitModalConfirm(failedStatus)
-			showLine(e.msg,props,'error')
-			return;
-		}
-
-		//根据选择触发安装模式
-		showLine('====开始安装依赖====',props)
-		try {
-			showLine('正在安装依赖，时间较长，请耐心等待',props)
-			const gitRes = await initProject.runNpm(data)
-			showLine(gitRes.msg,props,'success')
-			showLine('安装依赖成功',props,'success')
-		} catch (e) {
-			showLine(e.msg,props,'error')
-			return;
-		}
-
-		props.showInitModalConfirm({loading:false,okText:'初始化完成'});
-
-		data.isInit = true;
-		props.initComplete(data);
-
 	}else if(data.templateData.type === 'local'){
-		try {
-			await initProject.generateByLocal(data)
-		} catch (e) {
-			message.error(e);
+		try{
+			await dirIsExist(data,props)
+			await copyLocalTpl(data,props)
+			await generatePackageJson(data,props)
+			await installDependencies(data,props)
+			await doInitComplete(data,props)
+		}catch(e){
+			showLine(e,props,'error')
+			return
 		}
 	}
 }
