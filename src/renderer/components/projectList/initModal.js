@@ -10,6 +10,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {showInitModal,showInitInfo,showInitModalConfirm,initComplete} from '../../actions/projectList';
 import styles from './index.less';
+import loadingGif from '../../assets/img/loading.gif'
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -52,6 +53,8 @@ const showLine = (info,props,type) => {
 		txt = `<p style="color:#f5222d">${info}</p>`
 	}else if(type === 'success'){
 		txt = `<p style="color:#52c41a">${info}</p>`
+	}else if(type === 'noline'){
+		txt = `${info}`
 	}else{
 		txt = `<p>${info}</p>`
 	}
@@ -85,9 +88,13 @@ const copyGitTpl = async (data,props) => {
 	//clone git模版
 	showLine('====开始clone git模版====',props)
 	try {
-		showLine('正在clone git模版',props)
+		showLine(`<img src=${loadingGif} width='100'/>`,props)
+		const timer = setInterval(() => {
+			showLine('<span>||</span>',props,'noline')
+		},1000)
 		await initProject.generateByGit(data)
-		showLine('clone git模版成功',props,'success')
+		clearInterval(timer)
+		showLine('<span>100%</span>',props,'noline')
 	} catch (e) {
 		showLine('clone git模版失败！请检查git是否配置正确',props,'error')
 		props.showInitModalConfirm(failedStatus)
@@ -99,9 +106,12 @@ const removeGitInfo = async(data,props) => {
 	//清除模版信息
 	showLine('====开始清除模版信息====',props)
 	try {
-		showLine('正在清除模版信息',props)
+		const timer = setInterval(() => {
+			showLine('<span>||</span>',props,'noline')
+		},1000)
 		await initProject.cleanGitFile(data)
-		showLine('清除模版信息成功',props,'success')
+		clearInterval(timer)
+		showLine('<span>100%</span>',props,'noline')
 	} catch (e) {
 		showLine('清除模版信息失败',props,'error')
 		props.showInitModalConfirm(failedStatus)
@@ -113,9 +123,12 @@ const generatePackageJson = async (data,props) => {
 	//生成项目信息
 	showLine('====开始生成项目信息====',props)
 	try {
-		showLine('正在生成项目信息',props)
+		const timer = setInterval(() => {
+			showLine('<span>||</span>',props,'noline')
+		},1000)
 		await initProject.generatePackageJson(data)
-		showLine('生成项目信息成功',props,'success')
+		clearInterval(timer)
+		showLine('<span>100%</span>',props,'noline')
 	} catch (e) {
 		props.showInitModalConfirm(failedStatus)
 		throw(e.msg)
@@ -126,10 +139,14 @@ const installDependencies = async (data,props) => {
 	//根据选择触发安装模式
 	showLine('====开始安装依赖====',props)
 	try {
-		showLine('正在安装依赖，时间较长，请耐心等待',props)
+		showLine(`<img src=${loadingGif} width='100'/>`,props)
+		const timer = setInterval(() => {
+			showLine('<span>||</span>',props,'noline')
+		},1000)
 		const gitRes = await initProject.runNpm(data)
+		clearInterval(timer)
+		showLine('<span>100%</span>',props,'noline')
 		showLine(gitRes.msg,props,'success')
-		showLine('安装依赖成功',props,'success')
 	} catch (e) {
 		props.showInitModalConfirm(failedStatus)
 		throw(e.msg)
@@ -158,10 +175,10 @@ const doInitProject = async (data,props) => {
 	}else if(data.templateData.type === 'local'){
 		try{
 			await dirIsExist(data,props)
-			// await copyLocalTpl(data,props)
-			// await generatePackageJson(data,props)
-			// await installDependencies(data,props)
-			// await doInitComplete(data,props)
+			await copyLocalTpl(data,props)
+			await generatePackageJson(data,props)
+			await installDependencies(data,props)
+			await doInitComplete(data,props)
 		}catch(e){
 			showLine(e,props,'error')
 			return

@@ -65,7 +65,7 @@ class ProjectList extends Component {
         }else{
           return (
             <div>
-              <span className={publicStyles['op-list-btn']} key={record._id+'2'}>打开调试窗口</span>
+              <span className={publicStyles['op-list-btn']} key={record._id+'2'}>打开项目</span>
               <Popconfirm key={record._id+'3'} placement="topRight" title="确认删除？" onConfirm={() => {this.props.deleteData(record._id)}} okText="确认" cancelText="取消">
                 <span className={publicStyles['op-list-btn']}>删除</span>
               </Popconfirm>
