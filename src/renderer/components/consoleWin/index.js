@@ -10,18 +10,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchList, showInitModal, showData, deleteData} from '../../actions/projectList';
 
-// const childProcess = window.require('child_process');
-
-// let child = childProcess.exec('gulp');
-
-// child.stderr.on('data', function (err) {
-//   console.log('stderr: ' + err)
-// })
-
-// child.stdout.on('data', function (data) {
-//   console.log('stdout: ' + data)
-// })
-
 class ProjectList extends Component {
   constructor(props) {
     super(props);
@@ -77,13 +65,7 @@ class ProjectList extends Component {
 
     return (
       <MainLayout location={this.props.location}>
-        <InitModal visible = {
-          this.props.projectList.initVisible
-        } />
-        <div className={styles['m-project-list']}>
-        <Table columns={columns} dataSource={this.props.projectList.list} 
-        loading={this.props.common.status} rowKey={record => record._id} size="middle" pagination={false}/>
-        </div>
+          <div>test</div>
       </MainLayout>
     );
   }
