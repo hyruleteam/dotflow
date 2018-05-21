@@ -11,13 +11,7 @@ const spawn = require('child_process').spawn;
 
 log.transports.file.level = 'all';
 
-// 判断是否为空文件夹 export function checkDirIsEmpty(data) {   return new
-// Promise(function (resolve, reject) {     fs.readdir(data.localPath, (error,
-// result) => {       if (error) {         reject(error);       } else {
-// if (result === undefined) {           resolve({code: 0, msg: '文件夹不存在'})
-//   }         if (!result[0]) {           resolve({code: 1, msg: '文件夹为空'})
-//    } else {           resolve({code: 0, msg: '该文件夹不为空,不能创建项目'})         }
-//   }     });   }); } 判断文件夹是否存在
+//判断文件夹是否存在
 export function checkDirExists(data) {
   return new Promise(function (resolve, reject) {
     fs.pathExists(`${data.localPath}/${data.name}`, (err, exists) => {
@@ -127,32 +121,6 @@ export async function runNpm(data) {
     });
   });
 }
-
-// export async function runNpm(data) {
-//   const projectDir = `${data.localPath}/${data.name}`;
-//   log.info("开始npm 安装")
-//   return new Promise(function (resolve, reject) {
-//     const ls = spawn('gulp', {cwd: projectDir});
-//     ls
-//       .stdout
-//       .on('data', function (stdoutData) {
-//         console.log(stdoutData.toString())
-//         global
-//           .win
-//           .webContents
-//           .send('ping', stdoutData.toString())
-//       })
-//     ls
-//       .stderr
-//       .on('data', function (err) {
-//         console.log('stderr: ' + err)
-//       }) 
-//     ls
-//       .once('close', function () {
-//         console.log('install success...')
-//       })
-//   });
-// }
 
 export function init(data) {
   initpj.checkDirIsEmpty(data)

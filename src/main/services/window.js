@@ -7,6 +7,9 @@ let count = 0;
 export function create(opts) {
   count += 1;
   let win = new BrowserWindow(opts);
+  win.once('ready-to-show', () => {
+    win.show()
+  })
   win.on('close', () => {
     count -= 1;
     win = null;
@@ -22,6 +25,14 @@ export function getPath() {
   let path = `file://${join($dirname, '..', 'dist')}/index.html`;
   if (is.dev()) {
     path = 'http://127.0.0.1:3000';
+  }
+  return path;
+}
+
+export function getConsolePath() {
+  let path = `file://${join($dirname, '..', 'dist')}/index.html/#/consoleWin`;
+  if (is.dev()) {
+    path = 'http://127.0.0.1:3000/#/consoleWin';
   }
   return path;
 }

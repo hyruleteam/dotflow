@@ -7,6 +7,7 @@ import * as window from './services/window';
 import * as menu from './services/menu';
 import * as db from './services/db';
 import * as initProject from './services/initProject';
+import * as consoleWin from './services/consoleWin';
 import * as config from './configs/config';
 
 const dbstore = db.init();
@@ -55,6 +56,7 @@ global.services = {
   application,
   window,
   dbstore,
+  consoleWin,
   initProject
 };
 global.configs = {

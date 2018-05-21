@@ -4,6 +4,7 @@ import {
 import React, { Component } from 'react';
 import FlowList from './components/flowlist'
 import ProjectList from './components/projectList'
+import ConsoleWin from './components/consoleWin'
 
 class DefaultRouter extends Component {
   render() {
@@ -11,6 +12,7 @@ class DefaultRouter extends Component {
       <div>
         <Route exact path="/" component={ProjectList}/>
         <Route path="/flowlist" component={FlowList}/>
+        <Route path="/consoleWin" component={ConsoleWin}/>
       </div>
     );
   }

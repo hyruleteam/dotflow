@@ -1,12 +1,13 @@
 import { create, getPath } from './window';
 
 export function init() {
-  global.win = create({
+  let win = create({
     width: 1000,
     height: 680,
     minWidth: 1000,
     minHeight: 680,
+    show: false,
     titleBarStyle: 'hidden',
   });
-  global.win.loadURL(getPath());
+  win.loadURL(getPath());
 }

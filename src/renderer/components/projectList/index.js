@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from "react-router-dom";
 import { Table,Popconfirm } from 'antd';
 
 import MainLayout from '../layout/MainLayout';
@@ -9,6 +10,9 @@ import InitModal from "./initModal";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchList, showInitModal, showData, deleteData} from '../../actions/projectList';
+
+const {remote} = window.require('electron');
+const {consoleWin} = remote.getGlobal('services');
 
 // const childProcess = window.require('child_process');
 
@@ -29,6 +33,11 @@ class ProjectList extends Component {
 
   componentWillMount() {
     this.props.fetchList();
+  }
+
+  openConsole() {
+    console.log(consoleWin);
+    consoleWin.init()
   }
 
   render() {
@@ -57,7 +66,8 @@ class ProjectList extends Component {
           return (
             <div>
               <span className={publicStyles['op-list-btn']} key={record._id+'1'} onClick={() => {this.props.showInitModal(true,record)}}>初始化项目</span>
-              <Popconfirm key={record._id+'3'} placement="topRight" title="确认删除？" onConfirm={() => {this.props.deleteData(record._id)}} okText="确认" cancelText="取消">
+              <Popconfirm key={record._id+'3'} placement="topRight" title="确认删除？" 
+              onConfirm={() => {this.props.deleteData(record._id)}} okText="确认" cancelText="取消">
                 <span className={publicStyles['op-list-btn']}>删除</span>
               </Popconfirm>
             </div>
@@ -65,8 +75,9 @@ class ProjectList extends Component {
         }else{
           return (
             <div>
-              <span className={publicStyles['op-list-btn']} key={record._id+'2'}>打开项目</span>
-              <Popconfirm key={record._id+'3'} placement="topRight" title="确认删除？" onConfirm={() => {this.props.deleteData(record._id)}} okText="确认" cancelText="取消">
+              <span className={publicStyles['op-list-btn']} key={record._id+'2'} onClick={() => this.openConsole()}>打开调试</span>
+              <Popconfirm key={record._id+'3'} placement="topRight" title="确认删除？" 
+              onConfirm={() => {this.props.deleteData(record._id)}} okText="确认" cancelText="取消">
                 <span className={publicStyles['op-list-btn']}>删除</span>
               </Popconfirm>
             </div>
