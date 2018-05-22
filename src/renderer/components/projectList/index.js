@@ -14,18 +14,6 @@ import { fetchList, showInitModal, showData, deleteData} from '../../actions/pro
 const {remote} = window.require('electron');
 const {consoleWin} = remote.getGlobal('services');
 
-// const childProcess = window.require('child_process');
-
-// let child = childProcess.exec('gulp');
-
-// child.stderr.on('data', function (err) {
-//   console.log('stderr: ' + err)
-// })
-
-// child.stdout.on('data', function (data) {
-//   console.log('stdout: ' + data)
-// })
-
 class ProjectList extends Component {
   constructor(props) {
     super(props);
@@ -35,9 +23,8 @@ class ProjectList extends Component {
     this.props.fetchList();
   }
 
-  openConsole() {
-    console.log(consoleWin);
-    consoleWin.init()
+  openConsole(id) {
+    consoleWin.init(id)
   }
 
   render() {
@@ -75,7 +62,7 @@ class ProjectList extends Component {
         }else{
           return (
             <div>
-              <span className={publicStyles['op-list-btn']} key={record._id+'2'} onClick={() => this.openConsole()}>打开调试</span>
+              <span className={publicStyles['op-list-btn']} key={record._id+'2'} onClick={() => this.openConsole(record._id)}>打开调试</span>
               <Popconfirm key={record._id+'3'} placement="topRight" title="确认删除？" 
               onConfirm={() => {this.props.deleteData(record._id)}} okText="确认" cancelText="取消">
                 <span className={publicStyles['op-list-btn']}>删除</span>

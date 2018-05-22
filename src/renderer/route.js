@@ -12,7 +12,7 @@ class DefaultRouter extends Component {
       <div>
         <Route exact path="/" component={ProjectList}/>
         <Route path="/flowlist" component={FlowList}/>
-        <Route path="/consoleWin" component={ConsoleWin}/>
+        <Route path="/consoleWin/:id" component={ConsoleWin}/>
       </div>
     );
   }

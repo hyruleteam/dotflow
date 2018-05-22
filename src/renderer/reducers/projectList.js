@@ -9,6 +9,11 @@ const projectListReducer = function (state = {}, action) {
         ...state,
         list
       };
+    case types.PROJECTLIST_SHOW:
+      return {
+        ...state,
+        data:action.data
+      };
     case types.PROJECTLIST_INITMODAL:
       return {
         ...state,

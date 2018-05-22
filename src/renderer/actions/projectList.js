@@ -12,8 +12,12 @@ export function addData(data,modalType) {
   return {type: types.PROJECTLIST_ADD, data,modalType};
 }
 
-export function showData(id,modalType) {
-  return {type: types.PROJECTLIST_SHOW, id,modalType};
+export function showDataRequest(id) {
+  return {type: types.PROJECTLIST_SHOWREQUESET, id};
+}
+
+export function showData(data) {
+  return {type: types.PROJECTLIST_SHOW, data};
 }
 
 export function editData(data,modalType) {

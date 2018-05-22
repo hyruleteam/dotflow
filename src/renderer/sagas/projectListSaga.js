@@ -34,11 +34,7 @@ export function * projectShow(action) {
   try {
     const response = yield call(showProject, action.id);
     if (response.code === 1) {
-      if(action.modalType === 'git'){
-        yield put({type: 'PROJECTLIST_GITMODEL', gitVisible: true, data: response.data[0], isEdit: true});
-      }else{
-        yield put({type: 'PROJECTLIST_LOCALMODEL', localVisible: true, data: response.data[0], isEdit: true});
-      }
+      yield put({type: 'PROJECTLIST_SHOW', data: response.data[0]});
     }
   } catch (error) {
     yield put(fetchFailure());
@@ -91,7 +87,7 @@ export function * watchProjectList() {
   yield takeEvery('PROJECTLIST_REQUEST', fetchList)
   yield takeEvery('PROJECTLIST_ADD', projectAdd)
   yield takeEvery('PROJECTLIST_EDIT', projectEdit)
-  yield takeEvery('PROJECTLIST_SHOW', projectShow)
+  yield takeEvery('PROJECTLIST_SHOWREQUESET', projectShow)
   yield takeEvery('PROJECTLIST_DELETE', projectDelete)
   yield takeEvery('PROJECTLIST_INITCOMPLETE', projectInitComplete)
 }
