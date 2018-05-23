@@ -7,15 +7,15 @@ import {changeTerminalStatus} from '../../actions/consoleWin';
 import styles from './index.less';
 
 const Terminal = (props) => {
-  const {terminalStatus} = props;
+  const {terminalContent} = props;
   return (
-    <pre className={styles['m-console-info']} dangerouslySetInnerHTML={{__html:terminalStatus}}>
+    <pre className={styles['m-console-info']} dangerouslySetInnerHTML={{__html:terminalContent}}>
     </pre>
   );
 }
 
 const mapStateToProps = store => {
-		return {terminalStatus:store.consoleWin.terminalStatus};
+		return {terminalContent:store.consoleWin.terminalContent};
 };
 
 const mapDispatchToProps = dispatch => {

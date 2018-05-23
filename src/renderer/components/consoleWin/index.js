@@ -31,45 +31,75 @@ const process = window.require('process');
 
 let pid = null;
 
+const ProjectStatus = (props)=> {
+  const {terminalStatus,startProject,stopProject} = props;
+  if(terminalStatus == 1){
+    return (
+      <Button type="danger" ghost className={styles['stop-btn']} onClick={()=> {stopProject()}}>终止</Button>
+    )
+  }else{
+    return(
+      <Button type="default" ghost className={styles['start-btn']} onClick={()=> {startProject()}}>启动项目</Button>
+    )
+  }
+}
+
 class ConsoleWin extends Component {
   constructor(props) {
     super(props);
+    this.startProject = this.startProject.bind(this)
+    this.stopProject = this.stopProject.bind(this)
   }
 
   componentWillMount() {
     this.props.showDataRequest(this.props.match.params.id);
   }
 
-  startProject(){
-    let content = ''
-    
+  startProject() {
     const pathName = `${this.props.projectList.data.localPath}/${this.props.projectList.data.name}`
-    let child = childProcess.exec('gulp',{cwd:pathName});
+    let child = childProcess.exec('npm start',{cwd:pathName});
+    let content = ''
+  
     pid = child.pid;
     ipcRenderer.send('send-pid', pid)
   
-    child.stderr.on('data', err => {
-      content += `<code>${err.toString()}</code>`
-      this.props.changeTerminalStatus(content)
-      console.log('请检查端口占用情况')
-    })
-  
     child.stdout.on('data', data => {
       content += `<code>${data.toString()}</code>`
-      this.props.changeTerminalStatus(content)
+      this.props.changeTerminalStatus(1,content)
+    })
+  
+    child.stderr.on('data', err => {
+      content += `<code>${err.toString()}</code>`
+      this.props.changeTerminalStatus(0,content)
+
+      if(pid){
+        process.kill(pid);
+        pid = null;
+        ipcRenderer.send('send-pid', null)
+      }
     })
   }
-
-  stopProject() {
+  
+  stopProject(){
+    let content = ''
+  
     if(pid){
-      console.log(pid)
       process.kill(pid);
       ipcRenderer.send('send-pid', null)
-      console.log(`${pid}进程结束`)
+      content += `<code style='color:#f00'>${pid}进程结束</code>`
+      this.props.changeTerminalStatus(0,content);
+  
+      pid = null;
       return;
     }
     console.log('无响应进程')
+  }
 
+  cleanLog(){
+    console.log(this.props.terminalStatus)
+    if(this.props.terminalStatus === 1){
+      this.props.changeTerminalStatus(1,'');
+    }
   }
 
   render() {
@@ -77,14 +107,17 @@ class ConsoleWin extends Component {
       <div className={styles['m-console']}>
           <div className={styles['m-console-hd']}>
             <div className={styles['m-console-hd__tit']}>当前项目:{this.props.projectList.data?this.props.projectList.data.name:''}</div>
-            <div className={styles['m-console-hd__status']}>未运行</div>
-            <Button type="default" ghost className={styles['hd-btn']} onClick={()=> {this.startProject()}}>启动项目</Button>
-            <Button type="danger" ghost className={styles['hd-btn']} onClick={()=> {this.stopProject()}}>终止</Button>
+            <div className={styles['m-console-hd__status']+' '+(this.props.terminalStatus===1?styles['running']:'')}>{this.props.terminalStatus===1?'运行中...':'未运行'}</div>
+            <ProjectStatus 
+            terminalStatus={this.props.terminalStatus} 
+            startProject={this.startProject}
+            stopProject={this.stopProject}
+            ></ProjectStatus>
           </div>
           <div className={styles['m-console-opbar']}>
-            <span className={styles['clean-log']}><Icon type="delete" /> 清空日志</span>
+            <span className={styles['clean-log']} onClick={() => {this.cleanLog()}}><Icon type="delete" /> 清空日志</span>
           </div>
-          <Terminal terminalStatus={this.props.terminalStatus}></Terminal>
+          <Terminal terminalContent={this.props.terminalContent}></Terminal>
           <div className={styles['m-console-opration']}>
             <Button type="primary" ghost size="small" className={styles['op-btn']}>打包项目</Button>
             <Button type="primary" ghost size="small" className={styles['op-btn']}>运行测试</Button>
@@ -98,7 +131,11 @@ class ConsoleWin extends Component {
 }
 
 const mapStateToProps = store => {
-  return { projectList: store.projectList,common: store.common };
+  return { 
+    projectList: store.projectList,
+    common: store.common,
+    terminalStatus:store.consoleWin.terminalStatus
+  };
 };
 
 const mapDispatchToProps = dispatch => {
