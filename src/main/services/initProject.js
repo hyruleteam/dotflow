@@ -8,6 +8,9 @@ const fs = require('fs-extra')
 const os = require('os');
 const exec = require('child_process').exec;
 const spawn = require('child_process').spawn;
+const process = require('process');
+
+process.env.PATH = process.env.PATH + ':/usr/local/bin';
 
 log.transports.file.level = 'all';
 

@@ -30,7 +30,7 @@ export function getPath() {
 }
 
 export function getConsolePath(id) {
-  let path = `file://${join($dirname, '..', 'dist')}/index.html/#/consoleWin/${id}`;
+  let path = `file://${join($dirname, '..', 'dist')}/index.html#/consoleWin/${id}`;
   if (is.dev()) {
     path = `http://127.0.0.1:3000/#/consoleWin/${id}`;
   }

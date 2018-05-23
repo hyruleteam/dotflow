@@ -80,7 +80,7 @@
       "dist/*",
       "dist/**/*"
     ],
-    "asar": true
+    "asar": false
   },
   "jest": {
     "collectCoverageFrom": [
