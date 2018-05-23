@@ -64,7 +64,11 @@ class ConsoleWin extends Component {
     ipcRenderer.send('send-pid', pid)
   
     child.stdout.on('data', data => {
-      content += `<code>${data.toString()}</code>`
+      data = data.toString();
+      data = data.replace(/\[(.*?)\]/g, '[<span style="color:#28C76F">$1</span>]');
+      data = data.replace(/\'(.*?)\'/g, '\'<span style="color:#0396FF">$1</span>\'');
+      data = data.replace(/\((.*?)\)/g, '\'<span style="color:#6018DC">$1</span>\'');
+      content += `<code>${data}</code>`
       this.props.changeTerminalStatus(1,content)
     })
   
