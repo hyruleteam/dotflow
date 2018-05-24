@@ -88,8 +88,8 @@ class FlowList extends Component {
             type="primary"
             className={publicStyles['op-btn']}
             icon="upload"
-            onClick={() => {this.props.showGitModal(true)}}>从git repo新增脚手架</Button>
-          <Button type="primary" className={publicStyles['op-btn']} icon="upload" ghost onClick={() => {this.props.showLocalModal(true)}}>从本地导入脚手架</Button>
+            onClick={() => {this.props.showGitModal(true)}}>从git repo添加脚手架</Button>
+          <Button type="primary" className={publicStyles['op-btn']} icon="upload" ghost onClick={() => {this.props.showLocalModal(true)}}>从本地添加脚手架</Button>
         </div>
         <div className={styles['m-flow-list']}>
           <Spin spinning={this.props.common.status}>

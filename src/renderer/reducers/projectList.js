@@ -30,6 +30,12 @@ const projectListReducer = function (state = {}, action) {
         ...state,
         info: action.info
       };
+    case types.PROJECTLIST_IMPORTMODAL_SHOW:
+      return {
+        ...state,
+        data: action.data,
+        importVisible:action.importVisible
+      };
     default:
       return state
   }

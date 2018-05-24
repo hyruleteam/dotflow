@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Layout } from 'antd';
+import { Layout,Icon } from 'antd';
 import MainHeader from './MainHeader';
 import MainSide from './MainSide';
 import styles from './MainLayout.less';
@@ -17,6 +17,14 @@ class MainLayout extends Component {
             <Content>
               { this.props.children }
             </Content>
+            <div className={styles.footer}>
+              <p>
+              dotflow <Icon type="github" /> hyruleteam
+              </p>
+              <p>
+              Copyright <Icon type="copyright" />  2018 海拉鲁野生技术组织出品
+              </p>
+            </div>
           </Layout>
         </Layout>
       </Layout>

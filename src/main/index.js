@@ -6,6 +6,7 @@ import * as application from './services/application';
 import * as window from './services/window';
 import * as menu from './services/menu';
 import * as db from './services/db';
+import * as utils from './services/utils';
 import * as initProject from './services/initProject';
 import * as consoleWin from './services/consoleWin';
 import * as config from './configs/config';
@@ -56,6 +57,7 @@ global.services = {
   application,
   window,
   dbstore,
+  utils,
   consoleWin,
   initProject
 };

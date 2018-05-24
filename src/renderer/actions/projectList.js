@@ -43,3 +43,7 @@ export function showInitInfo(info="") {
 export function initComplete(data) {
   return { type: types.PROJECTLIST_INITCOMPLETE, data};
 }
+
+export function showImportModal(importVisible,data) {
+  return { type: types.PROJECTLIST_IMPORTMODAL_SHOW, importVisible,data};
+}

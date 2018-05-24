@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Button,Icon,Dropdown,Menu } from 'antd';
 
-import publicStyles from '../layout/public.less';
 import styles from './index.less';
 
 import { bindActionCreators } from 'redux';
@@ -33,7 +32,7 @@ let pid = null;
 
 const ProjectStatus = (props)=> {
   const {terminalStatus,startProject,stopProject} = props;
-  if(terminalStatus == 1){
+  if(terminalStatus === 1){
     return (
       <Button type="danger" ghost className={styles['stop-btn']} onClick={()=> {stopProject()}}>终止</Button>
     )

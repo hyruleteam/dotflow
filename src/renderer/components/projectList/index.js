@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import { Link } from "react-router-dom";
-import { Table,Popconfirm } from 'antd';
+import { Table,Popconfirm,Button } from 'antd';
 
 import MainLayout from '../layout/MainLayout';
 import publicStyles from '../layout/public.less';
 import styles from './index.less';
 import InitModal from "./initModal";
+import ImportModal from "./importModal";
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { fetchList, showInitModal, showData, deleteData} from '../../actions/projectList';
+import { fetchList, showInitModal,showImportModal, showData, deleteData} from '../../actions/projectList';
 
 const {remote} = window.require('electron');
 const {consoleWin} = remote.getGlobal('services');
@@ -78,6 +78,15 @@ class ProjectList extends Component {
         <InitModal visible = {
           this.props.projectList.initVisible
         } />
+        <ImportModal visible = {
+          this.props.projectList.importVisible
+        } />
+        <div className="m-flow-op">
+          <Button
+            type="primary"
+            className={publicStyles['op-btn']}
+            icon="download" onClick={() => {this.props.showImportModal(true)}}>导入已有项目</Button>
+        </div>
         <div className={styles['m-project-list']}>
         <Table columns={columns} dataSource={this.props.projectList.list} 
         loading={this.props.common.status} rowKey={record => record._id} size="middle" pagination={false}/>
@@ -88,13 +97,17 @@ class ProjectList extends Component {
 }
 
 const mapStateToProps = store => {
-  return { projectList: store.projectList,common: store.common };
+  return { 
+    projectList: store.projectList,
+    common: store.common 
+  };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     fetchList: bindActionCreators(fetchList, dispatch),
     showInitModal: bindActionCreators(showInitModal, dispatch),
+    showImportModal:bindActionCreators(showImportModal, dispatch),
     showData: bindActionCreators(showData, dispatch),
     deleteData:bindActionCreators(deleteData, dispatch)
   };

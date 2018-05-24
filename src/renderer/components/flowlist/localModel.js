@@ -25,33 +25,33 @@ const formItemLayout = {
 };
 
 const handleOk = (props) => {
-		props
-				.form
-				.validateFields((err, values) => {
-						if (!err) {
-								const avatar = values
-										.name
-										.substring(0, 1)
-										.toUpperCase();
-								if (props.isEdit) {
-										const data = {
-												values: {
-														...values
-												},
-												_id: props.data._id
-										}
-										props.editData(data, 'local')
-								} else {
-										const data = {
-												...values,
-												avatar: avatar,
-												type: 'local',
-												isDefault: 0
-										}
-										props.addData(data, 'local')
-								}
-						}
-				});
+	props
+			.form
+			.validateFields((err, values) => {
+					if (!err) {
+							const avatar = values
+									.name
+									.substring(0, 1)
+									.toUpperCase();
+							if (props.isEdit) {
+									const data = {
+											values: {
+													...values
+											},
+											_id: props.data._id
+									}
+									props.editData(data, 'git')
+							} else {
+									const data = {
+											...values,
+											avatar: avatar,
+											type: 'git',
+											isDefault: 0
+									}
+									props.addData(data, 'git')
+							}
+					}
+			});
 }
 
 const handleCancel = (props) => {
@@ -95,7 +95,7 @@ const LocalModel = Form.create({
 		return (
 				<div>
 						<Modal
-								title="从本地导入工作流"
+								title="从本地添加脚手架"
 								okText="确定"
 								cancelText="取消"
 								visible={visible}

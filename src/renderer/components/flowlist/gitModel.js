@@ -72,7 +72,7 @@ const GitModel = Form.create({
 		return (
 				<div>
 						<Modal
-								title="从git repo新增工作流"
+								title="从git repo添加脚手架"
 								okText="确定"
 								cancelText="取消"
 								visible={visible}

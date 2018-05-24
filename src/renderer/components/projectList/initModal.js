@@ -2,8 +2,7 @@ import React from 'react';
 import {
 		Modal,
 		Form,
-		Radio,
-		message
+		Radio
 } from 'antd';
 
 import {bindActionCreators} from 'redux';
@@ -120,10 +119,11 @@ const removeGitInfo = async(data,props) => {
 }
 
 const generatePackageJson = async (data,props) => {
+	let timer = null
 	//生成项目信息
 	showLine('====开始生成项目信息====',props)
 	try {
-		const timer = setInterval(() => {
+		timer = setInterval(() => {
 			showLine('<span>||</span>',props,'noline')
 		},1000)
 		await initProject.generatePackageJson(data)
@@ -131,16 +131,18 @@ const generatePackageJson = async (data,props) => {
 		showLine('<span>100%</span>',props,'noline')
 	} catch (e) {
 		props.showInitModalConfirm(failedStatus)
+		clearInterval(timer)
 		throw(e.msg)
 	}
 }
 
 const installDependencies = async (data,props) => {
 	//根据选择触发安装模式
+	let timer = null;
 	showLine('====开始安装依赖====',props)
 	try {
 		showLine(`<img src=${loadingGif} width='100'/>`,props)
-		const timer = setInterval(() => {
+		timer = setInterval(() => {
 			showLine('<span>||</span>',props,'noline')
 		},1000)
 		const gitRes = await initProject.runNpm(data)
@@ -149,6 +151,7 @@ const installDependencies = async (data,props) => {
 		showLine(gitRes.msg,props,'success')
 	} catch (e) {
 		props.showInitModalConfirm(failedStatus)
+		clearInterval(timer)
 		throw(e.msg)
 	}
 }

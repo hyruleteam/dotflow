@@ -33,6 +33,7 @@ const handleOk = (props) => {
 							const data = {
 									...values,
 									isInit:false,
+									isImport:false,
 									templateData:{...props.data}
 							}
 							props.addData(data)
