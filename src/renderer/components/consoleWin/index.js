@@ -58,9 +58,10 @@ class ConsoleWin extends Component {
   
     child.stdout.on('data', data => {
       data = data.toString();
-      data = data.replace(/\[(.*?)\]/g, '[<span style="color:#28C76F">$1</span>]');
-      data = data.replace(/\'(.*?)\'/g, '\'<span style="color:#0396FF">$1</span>\'');
-      data = data.replace(/\((.*?)\)/g, '\'<span style="color:#6018DC">$1</span>\'');
+      data = data.replace(/\[(.*?)\]/g, '[<span style="color:#999">$1</span>]');
+      data = data.replace(/\'(.*?)\'/g, '\'<span style="color:#00c5c7">$1</span>\'');
+      data = data.replace(/\((.*?)\)/g, '<span style="color:#ca30c7">$1</span>');
+      data = data.replace(/(https?:\/{2}[^\s]*)/g, '<span style="color:#ca30c7">$1</span>');
       content += `<code>${data}</code>`
       this.props.changeTerminalStatus(1,content)
     })
@@ -118,9 +119,9 @@ class ConsoleWin extends Component {
           <div className={styles['m-console-opration']}>
             <Button type="primary" ghost size="small" className={styles['op-btn']}>打包项目</Button>
             <Button type="primary" ghost size="small" className={styles['op-btn']}>运行测试</Button>
-            <Dropdown overlay={menuCnt} placement="topCenter">
+            {/* <Dropdown overlay={menuCnt} placement="topCenter">
               <Button size="small" className={styles['op-btn']}>更多命令</Button>
-            </Dropdown>
+            </Dropdown> */}
           </div>
       </div>
     );

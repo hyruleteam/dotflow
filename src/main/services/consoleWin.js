@@ -9,9 +9,9 @@ ipcMain.on('send-pid', (event, arg) => {
 })
 
 export function init(id) {
-  // globalShortcut.register('Command+R', function() {
-  //   console.log(1111)
-  // })
+  globalShortcut.register('Command+R', function() {
+    
+  })
 
   let win = create({
     width: 300,
