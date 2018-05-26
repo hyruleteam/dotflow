@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow,globalShortcut } from 'electron';
 import is from 'electron-is';
 import { join } from 'path';
 import log from 'electron-log';
@@ -34,6 +34,16 @@ app.on('ready', () => {
     // BrowserWindow.addDevToolsExtension(join($dirname, '../../extensions/react-developer-tools/0.15.4_0'));
   }
 });
+
+app.on('browser-window-focus', () =>{
+  globalShortcut.register('Command+R', function() {
+    console.log('*')
+  })
+})
+
+app.on('browser-window-blur', () =>{
+  globalShortcut.unregister('Command+R')
+})
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {

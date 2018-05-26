@@ -1,6 +1,6 @@
 import { create, getConsolePath } from './window';
 
-const {ipcMain,dialog,globalShortcut} = require('electron')
+const {ipcMain,dialog} = require('electron')
 const process = require('process');
 let pid = null;
 
@@ -9,10 +9,6 @@ ipcMain.on('send-pid', (event, arg) => {
 })
 
 export function init(id) {
-  globalShortcut.register('Command+R', function() {
-    
-  })
-
   let win = create({
     width: 300,
     height: 580,

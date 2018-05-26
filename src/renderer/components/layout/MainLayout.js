@@ -19,10 +19,10 @@ class MainLayout extends Component {
             </Content>
             <div className={styles.footer}>
               <p>
-              dotflow <Icon type="github" /> hyruleteam
+              Dotflow <Icon type="github" /> hyruleteam
               </p>
               <p>
-              Copyright <Icon type="copyright" />  2018 海拉鲁野生技术组织出品
+              Copyright <Icon type="copyright" />  2018 Hyrule野生技术组织出品
               </p>
             </div>
           </Layout>
