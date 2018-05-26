@@ -1,5 +1,5 @@
 {
-  "name": "electron-react",
+  "name": "Dotflow",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -84,7 +84,7 @@
       "dist/*",
       "dist/**/*"
     ],
-    "asar": false
+    "asar": true
   },
   "jest": {
     "collectCoverageFrom": [
