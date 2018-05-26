@@ -21,6 +21,9 @@ const menuCnt = (
 const {ipcRenderer} = window.require('electron')
 const childProcess = window.require('child_process');
 const process = window.require('process');
+const Convert = require('ansi-to-html');
+const convert = new Convert();
+
 
 let pid = null;
 
@@ -50,31 +53,37 @@ class ConsoleWin extends Component {
 
   startProject() {
     const pathName = `${this.props.projectList.data.localPath}/${this.props.projectList.data.name}`
-    let child = childProcess.exec('npm start',{cwd:pathName});
+    // let child = childProcess.exec('npm start',{cwd:pathName});
+    let child = childProcess.spawn('npm',['start'],{cwd:pathName,encoding: 'utf8'});
     let content = ''
   
     pid = child.pid;
+
     ipcRenderer.send('send-pid', pid)
-  
     child.stdout.on('data', data => {
       data = data.toString();
+      //for gulp
       data = data.replace(/\[(.*?)\]/g, '[<span style="color:#999">$1</span>]');
       data = data.replace(/\'(.*?)\'/g, '\'<span style="color:#00c5c7">$1</span>\'');
       data = data.replace(/\((.*?)\)/g, '<span style="color:#ca30c7">$1</span>');
       data = data.replace(/(https?:\/{2}[^\s]*)/g, '<span style="color:#ca30c7">$1</span>');
+
+      //for webpack
+      data = convert.toHtml(data)
       content += `<code>${data}</code>`
       this.props.changeTerminalStatus(1,content)
     })
   
     child.stderr.on('data', err => {
+      console.log(err.toString())
       content += `<code>${err.toString()}</code>`
-      this.props.changeTerminalStatus(0,content)
+      this.props.changeTerminalStatus(1,content)
 
-      if(pid){
-        process.kill(pid);
-        pid = null;
-        ipcRenderer.send('send-pid', null)
-      }
+      // if(pid){
+      //   process.kill(pid);
+      //   pid = null;
+      //   ipcRenderer.send('send-pid', null)
+      // }
     })
   }
   
