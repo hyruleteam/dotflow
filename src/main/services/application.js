@@ -7,6 +7,7 @@ export function init() {
     minWidth: 1000,
     minHeight: 680,
     titleBarStyle: 'hidden',
+    icon:__dirname + '/app/assets/img/128.png'
   });
   win.loadURL(getPath());
 }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button,Icon,Dropdown,Menu } from 'antd';
+import { Button,Icon } from 'antd';
 
 import styles from './index.less';
 
@@ -10,13 +10,13 @@ import { changeTerminalStatus } from '../../actions/consoleWin';
 
 import Terminal from './terminal';
 
-const menuCnt = (
-  <Menu>
-    <Menu.Item>
-      <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">1st menu item</a>
-    </Menu.Item>
-  </Menu>
-)
+// const menuCnt = (
+//   <Menu>
+//     <Menu.Item>
+//       <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">1st menu item</a>
+//     </Menu.Item>
+//   </Menu>
+// )
 
 const {ipcRenderer} = window.require('electron')
 const childProcess = window.require('child_process');

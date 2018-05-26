@@ -74,10 +74,13 @@
   "build": {
     "appId": "com.wenyu.dva-boilerplate",
     "directories": {
-      "app": "app"
+      "app": "app",
+      "buildResources": "app/assets/img"
+    },
+    "dmg":{
+      "icon":"app/assets/img/icon.icns"
     },
     "files": [
-      "**/*",
       "dist/*",
       "dist/**/*"
     ],
