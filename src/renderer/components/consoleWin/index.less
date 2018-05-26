@@ -21,24 +21,44 @@
         color:#FCCF31
       }
     }
-    .start-btn{
-      &:hover{
-        border-color:#FCCF31;
-        color:#FCCF31;
+    :global{
+      .ant-btn-default{
+        &:hover{
+          border-color:#FCCF31;
+          color:#FCCF31;
+        }
+        &:focus{
+          border-color:#fff;
+          color:#fff;
+        }
       }
-      &:focus{
+      .ant-btn-danger{
         border-color:#fff;
         color:#fff;
+        &:hover,&:focus{
+          border-color:#fff;
+          color:#fff;
+        }
       }
     }
-    .stop-btn{
-      border-color:#fff;
-      color:#fff;
-      &:hover,&:focus{
-        border-color:#fff;
-        color:#fff;
-      }
-    }
+    // .start-btn{
+    //   &:hover{
+    //     border-color:#FCCF31;
+    //     color:#FCCF31;
+    //   }
+    //   &:focus{
+    //     border-color:#fff;
+    //     color:#fff;
+    //   }
+    // }
+    // .stop-btn{
+    //   border-color:#fff;
+    //   color:#fff;
+    //   &:hover,&:focus{
+    //     border-color:#fff;
+    //     color:#fff;
+    //   }
+    // }
   }
   &-opbar{
     height:30px;
