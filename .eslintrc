@@ -1,6 +1,6 @@
 {
   "parser": "babel-eslint",
-  "extends": "airbnb",
+  "extends": "react-app",
   "env": {
     "mocha": true
   },
@@ -19,6 +19,8 @@
     "import/no-extraneous-dependencies": [0],
     "no-use-before-define": [0],
     "no-console": "off",
+    "no-useless-constructor": "off",
+    "no-useless-escape": "off",
     "jsx-a11y/no-static-element-interactions": [0],
     "jsx-a11y/anchor-is-valid": [ "error", {
       "components": [ "Link" ],
