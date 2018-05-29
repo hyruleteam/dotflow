@@ -44,9 +44,8 @@ const handleOk = (props) => {
 				.validateFields(async (err, values) => {
 						if (!err) {
               try{
-                let last_pos = values.localPath.lastIndexOf('/');
                 let data = {
-                  localPath:values.localPath.substr(0,last_pos),
+                  localPath:values.localPath,
                   isInit:true,
                   isImport:true
                 }

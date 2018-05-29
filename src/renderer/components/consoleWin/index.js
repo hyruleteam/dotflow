@@ -45,6 +45,7 @@ class ConsoleWin extends Component {
     super(props);
     this.startProject = this.startProject.bind(this)
     this.stopProject = this.stopProject.bind(this)
+    this.buildProject = this.buildProject.bind(this)
   }
 
   componentWillMount() {
@@ -52,8 +53,7 @@ class ConsoleWin extends Component {
   }
 
   startProject() {
-    const pathName = `${this.props.projectList.data.localPath}/${this.props.projectList.data.name}`
-    // let child = childProcess.exec('npm start',{cwd:pathName});
+    const pathName = `${this.props.projectList.data.localPath}`
     let child = childProcess.spawn('npm',['start'],{cwd:pathName,encoding: 'utf8'});
     let content = ''
   
@@ -78,12 +78,6 @@ class ConsoleWin extends Component {
       console.log(err.toString())
       content += `<code>${err.toString()}</code>`
       this.props.changeTerminalStatus(1,content)
-
-      // if(pid){
-      //   process.kill(pid);
-      //   pid = null;
-      //   ipcRenderer.send('send-pid', null)
-      // }
     })
   }
   
@@ -100,6 +94,36 @@ class ConsoleWin extends Component {
       return;
     }
     console.log('无响应进程')
+  }
+
+  buildProject() {
+    this.stopProject();
+
+    const pathName = `${this.props.projectList.data.localPath}`
+    let child = childProcess.spawn('npm',['run','build'],{cwd:pathName,encoding: 'utf8'});
+    let content = ''
+
+    child.stdout.on('data', data => {
+      data = data.toString();
+      //for gulp
+      data = data.replace(/\[(.*?)\]/g, '[<span style="color:#999">$1</span>]');
+      data = data.replace(/\'(.*?)\'/g, '\'<span style="color:#00c5c7">$1</span>\'');
+      data = data.replace(/\((.*?)\)/g, '<span style="color:#ca30c7">$1</span>');
+      data = data.replace(/(https?:\/{2}[^\s]*)/g, '<span style="color:#ca30c7">$1</span>');
+
+      //for webpack
+      data = convert.toHtml(data)
+      content += `<code>${data}</code>`
+      this.props.changeTerminalStatus(0,content)
+    })
+  
+    child.stderr.on('data', err => {
+      console.log(err.toString())
+      content += `<code>${err.toString()}</code>`
+      this.props.changeTerminalStatus(0,content)
+    })
+
+    ipcRenderer.send('send-pid', null)
   }
 
   cleanLog(){
@@ -126,7 +150,7 @@ class ConsoleWin extends Component {
           </div>
           <Terminal terminalContent={this.props.terminalContent}></Terminal>
           <div className={styles['m-console-opration']}>
-            <Button type="primary" ghost size="small" className={styles['op-btn']}>打包项目</Button>
+            <Button type="primary" ghost size="small" className={styles['op-btn']} onClick={() => {this.buildProject()}}>打包项目</Button>
             <Button type="primary" ghost size="small" className={styles['op-btn']}>运行测试</Button>
             {/* <Dropdown overlay={menuCnt} placement="topCenter">
               <Button size="small" className={styles['op-btn']}>更多命令</Button>
