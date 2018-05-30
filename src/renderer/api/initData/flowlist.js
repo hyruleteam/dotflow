@@ -13,7 +13,7 @@ const data = [{
   description: '这是切图必备生成器',
   type: 'git',
   isDefault: 1,
-  tempURL:'',
+  tempURL:'git@github.com:hyruleteam/dotflow_gulp_mobile.git',
 }, {
   _id:'3',
   avatar: 'V',
@@ -21,7 +21,7 @@ const data = [{
   description: '最顺手的vue-admin脚手架',
   type: 'git',
   isDefault: 1,
-  tempURL:'',
+  tempURL:'git@github.com:wenyuking/hyrule-laravel-vue.git',
 }];
 
 export default data;

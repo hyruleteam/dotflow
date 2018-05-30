@@ -70,6 +70,7 @@ class ConsoleWin extends Component {
 
       //for webpack
       data = convert.toHtml(data)
+      data = data.replace(/1m/g, '');
       content += `<code>${data}</code>`
       this.props.changeTerminalStatus(1,content)
     })
