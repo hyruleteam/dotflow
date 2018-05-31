@@ -36,6 +36,7 @@
     "extract-text-webpack-plugin": "3.0.2",
     "file-loader": "1.1.5",
     "fs-extra": "^6.0.1",
+    "history": "^4.7.2",
     "html-webpack-plugin": "2.29.0",
     "jest": "20.0.4",
     "less": "^3.0.4",
@@ -49,6 +50,7 @@
     "react-dom": "^16.3.2",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.2.2",
+    "react-router-redux": "^5.0.0-alpha.9",
     "redux": "^4.0.0",
     "redux-logger": "^3.0.6",
     "redux-saga": "^0.16.0",
@@ -77,8 +79,8 @@
       "app": "app",
       "buildResources": "app/assets/img"
     },
-    "dmg":{
-      "icon":"app/assets/img/icon.icns"
+    "dmg": {
+      "icon": "app/assets/img/icon.icns"
     },
     "files": [
       "dist/*",
