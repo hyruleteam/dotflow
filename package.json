@@ -82,6 +82,10 @@
     "dmg": {
       "icon": "app/assets/img/icon.icns"
     },
+    "win": {
+      "target":"msi",
+      "icon": "app/assets/img/icon.ico"
+    },
     "files": [
       "dist/*",
       "dist/**/*"
