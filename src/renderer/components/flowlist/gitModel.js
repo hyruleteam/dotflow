@@ -109,9 +109,6 @@ const GitModel = Form.create({
 																{
 																		required: true,
 																		message: '请输入git repo 地址!'
-																}, {
-																		type: "url",
-																		message: 'url地址不合法'
 																}
 														]
 												})(<Input placeholder="请输入git repo 地址"/>)}

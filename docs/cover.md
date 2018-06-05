@@ -9,4 +9,4 @@
 * 支持git线上脚手架，本地脚手架导入
 
 [GitHub](https://github.com/hyruleteam/dotflow)
-[快速开始](#quick-start)
+[快速开始](#是什么)

@@ -97,6 +97,7 @@ const copyGitTpl = async (data,props) => {
 	} catch (e) {
 		showLine('clone git模版失败！请检查git是否配置正确',props,'error')
 		props.showInitModalConfirm(failedStatus)
+		clearInterval(timer)
 		throw(e.msg)
 	}
 }
@@ -114,6 +115,7 @@ const removeGitInfo = async(data,props) => {
 	} catch (e) {
 		showLine('清除模版信息失败',props,'error')
 		props.showInitModalConfirm(failedStatus)
+		clearInterval(timer)
 		throw(e.msg)
 	}
 }
