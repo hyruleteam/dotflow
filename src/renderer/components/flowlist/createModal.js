@@ -31,6 +31,7 @@ const handleOk = (props) => {
 				.form
 				.validateFields((err, values) => {
 						if (!err) {
+              values.allPath = `${values.localPath}/${values.name}`
 							const data = {
 									...values,
 									isInit:false,

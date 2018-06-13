@@ -17,7 +17,7 @@ log.transports.file.level = 'all';
 //判断文件夹是否存在
 export function checkDirExists(data) {
   return new Promise(function (resolve, reject) {
-    fs.pathExists(`${data.localPath}/${data.name}`, (err, exists) => {
+    fs.pathExists(`${data.allPath}`, (err, exists) => {
       if (!exists) {
         resolve({code: 1, msg: '文件夹不存在'})
       } else {
@@ -54,7 +54,7 @@ export async function generateByGit(data) {
 
 //清除git信息
 export function cleanGitFile(data) {
-  const projectDir = `${data.localPath}/${data.name}`;
+  const projectDir = `${data.allPath}`;
   log.info("开始清除git信息")
   return new Promise(function (resolve, reject) {
     fs.remove(`${projectDir}/.git`, err => {
@@ -69,7 +69,7 @@ export function cleanGitFile(data) {
 //本地生成文件
 export async function generateByLocal(data) {
   const tmpInfo = data.templateData;
-  const targetDir = `${data.localPath}/${data.name}`;
+  const targetDir = `${data.allPath}`;
   if (tmpInfo.type === 'local') {
     return new Promise(function (resolve, reject) {
       fs.copy(tmpInfo.localPath, targetDir, err => {
@@ -86,19 +86,19 @@ export async function generateByLocal(data) {
 
 //替换package.json模版
 export async function generatePackageJson(data) {
-  const jsonFile = `${data.localPath}/${data.name}/package.json`;
+  const jsonFile = `${data.allPath}/package.json`;
   log.info("开始替换package.json模版")
   return new Promise(function (resolve, reject) {
     const {name, description, author} = data;
     fs.readJson(jsonFile, (err, packageObj) => {
-      if (err) 
+      if (err)
         reject({code: 1, msg: err})
-      packageObj.name = data.name;
-      packageObj.description = data.description;
-      packageObj.author = data.author;
+      packageObj.name = name;
+      packageObj.description = description;
+      packageObj.author = author;
 
       fs.writeJson(jsonFile, packageObj, err => {
-        if (err) 
+        if (err)
           reject({code: 1, msg: err})
         log.info('替换成功！')
         resolve({code: 1, msg: '替换成功！'})
@@ -109,7 +109,7 @@ export async function generatePackageJson(data) {
 
 //npm 安装
 export async function runNpm(data) {
-  const projectDir = `${data.localPath}/${data.name}`;
+  const projectDir = `${data.allPath}`;
   log.info("开始npm 安装")
   return new Promise(function (resolve, reject) {
     exec('npm install', {

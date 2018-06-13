@@ -1,5 +1,5 @@
 import React from 'react';
-import { 
+import {
   Modal,
   Form,
   Input,
@@ -43,9 +43,11 @@ const handleOk = (props) => {
 				.form
 				.validateFields(async (err, values) => {
 						if (!err) {
+              values.allPath = values.localPath
               try{
                 let data = {
                   localPath:values.localPath,
+                  allPath:values.localPath,
                   isInit:true,
                   isImport:true
                 }
@@ -53,7 +55,7 @@ const handleOk = (props) => {
                 data.name = msg.name;
                 data.description = msg.description;
                 data.author = msg.author
-                
+
                 props.addData(data);
                 props.showImportModal(false);
                 props.fetchList();
@@ -127,8 +129,8 @@ const ImportModal = Form.create({
 
 const mapStateToProps = store => {
     return {
-      importVisible: store.projectList.importVisible, 
-      data: store.projectList.data, 
+      importVisible: store.projectList.importVisible,
+      data: store.projectList.data,
     };
 };
 

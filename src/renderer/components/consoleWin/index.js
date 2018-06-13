@@ -53,10 +53,10 @@ class ConsoleWin extends Component {
   }
 
   startProject() {
-    const pathName = `${this.props.projectList.data.localPath}`
+    const pathName = `${this.props.projectList.data.allPath}`
     let child = childProcess.spawn('npm',['start'],{cwd:pathName,encoding: 'utf8'});
     let content = ''
-  
+
     pid = child.pid;
 
     ipcRenderer.send('send-pid', pid)
@@ -74,23 +74,23 @@ class ConsoleWin extends Component {
       content += `<code>${data}</code>`
       this.props.changeTerminalStatus(1,content)
     })
-  
+
     child.stderr.on('data', err => {
       console.log(err.toString())
       content += `<code>${err.toString()}</code>`
       this.props.changeTerminalStatus(1,content)
     })
   }
-  
+
   stopProject(){
     let content = ''
-  
+
     if(pid){
       process.kill(pid);
       ipcRenderer.send('send-pid', null)
       content += `<code style='color:#f00'>${pid}进程结束</code>`
       this.props.changeTerminalStatus(0,content);
-  
+
       pid = null;
       return;
     }
@@ -100,7 +100,7 @@ class ConsoleWin extends Component {
   buildProject() {
     this.stopProject();
 
-    const pathName = `${this.props.projectList.data.localPath}`
+    const pathName = `${this.props.projectList.data.allPath}`
     let child = childProcess.spawn('npm',['run','build'],{cwd:pathName,encoding: 'utf8'});
     let content = ''
 
@@ -117,7 +117,7 @@ class ConsoleWin extends Component {
       content += `<code>${data}</code>`
       this.props.changeTerminalStatus(0,content)
     })
-  
+
     child.stderr.on('data', err => {
       console.log(err.toString())
       content += `<code>${err.toString()}</code>`
@@ -140,8 +140,8 @@ class ConsoleWin extends Component {
           <div className={styles['m-console-hd']}>
             <div className={styles['m-console-hd__tit']}>当前项目:{this.props.projectList.data?this.props.projectList.data.name:''}</div>
             <div className={styles['m-console-hd__status']+' '+(this.props.terminalStatus===1?styles['running']:'')}>{this.props.terminalStatus===1?'运行中...':'未运行'}</div>
-            <ProjectStatus 
-            terminalStatus={this.props.terminalStatus} 
+            <ProjectStatus
+            terminalStatus={this.props.terminalStatus}
             startProject={this.startProject}
             stopProject={this.stopProject}
             ></ProjectStatus>
@@ -163,7 +163,7 @@ class ConsoleWin extends Component {
 }
 
 const mapStateToProps = store => {
-  return { 
+  return {
     projectList: store.projectList,
     common: store.common,
     terminalStatus:store.consoleWin.terminalStatus
