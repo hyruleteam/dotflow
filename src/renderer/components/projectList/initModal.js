@@ -84,11 +84,12 @@ const copyLocalTpl = async (data,props) => {
 }
 
 const copyGitTpl = async (data,props) => {
+  let timer = null;
 	//clone git模版
 	showLine('====开始clone git模版====',props)
 	try {
 		showLine(`<img src=${loadingGif} width='100'/>`,props)
-		const timer = setInterval(() => {
+		timer = setInterval(() => {
 			showLine('<span>||</span>',props,'noline')
 		},1000)
 		await initProject.generateByGit(data)
@@ -96,17 +97,18 @@ const copyGitTpl = async (data,props) => {
 		showLine('<span>100%</span>',props,'noline')
 	} catch (e) {
 		showLine('clone git模版失败！请检查git是否配置正确',props,'error')
-		props.showInitModalConfirm(failedStatus)
-		clearInterval(timer)
+    props.showInitModalConfirm(failedStatus)
+    clearInterval(timer)
 		throw(e.msg)
 	}
 }
 
 const removeGitInfo = async(data,props) => {
+  let timer = null;
 	//清除模版信息
 	showLine('====开始清除模版信息====',props)
 	try {
-		const timer = setInterval(() => {
+		timer = setInterval(() => {
 			showLine('<span>||</span>',props,'noline')
 		},1000)
 		await initProject.cleanGitFile(data)
@@ -231,7 +233,7 @@ const InitModel = Form.create()((props) => {
 
 const mapStateToProps = store => {
 		return {
-			initVisible: store.projectList.initVisible, 
+			initVisible: store.projectList.initVisible,
 			data: store.projectList.data,
 			info:store.projectList.info,
 			status:store.projectList.status,
