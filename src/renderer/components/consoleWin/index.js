@@ -18,7 +18,7 @@ import Terminal from './terminal';
 //   </Menu>
 // )
 
-const {ipcRenderer} = window.require('electron')
+const {ipcRenderer,shell} = window.require('electron')
 const childProcess = window.require('child_process');
 const process = window.require('process');
 const Convert = require('ansi-to-html');
@@ -76,7 +76,6 @@ class ConsoleWin extends Component {
     })
 
     child.stderr.on('data', err => {
-      console.log(err.toString())
       content += `<code>${err.toString()}</code>`
       this.props.changeTerminalStatus(1,content)
     })
@@ -119,7 +118,6 @@ class ConsoleWin extends Component {
     })
 
     child.stderr.on('data', err => {
-      console.log(err.toString())
       content += `<code>${err.toString()}</code>`
       this.props.changeTerminalStatus(0,content)
     })
@@ -128,10 +126,13 @@ class ConsoleWin extends Component {
   }
 
   cleanLog(){
-    console.log(this.props.terminalStatus)
     if(this.props.terminalStatus === 1){
       this.props.changeTerminalStatus(1,'');
     }
+  }
+
+  openFinder(fullPath){
+    shell.openItem(fullPath)
   }
 
   render() {
@@ -151,6 +152,7 @@ class ConsoleWin extends Component {
           </div>
           <Terminal terminalContent={this.props.terminalContent}></Terminal>
           <div className={styles['m-console-opration']}>
+            <Button type="primary" ghost size="small" className={styles['op-btn']} onClick={() => {this.openFinder(this.props.projectList.data.allPath)}}>打开项目位置</Button>
             <Button type="primary" ghost size="small" className={styles['op-btn']} onClick={() => {this.buildProject()}}>打包项目</Button>
             <Button type="primary" ghost size="small" className={styles['op-btn']}>运行测试</Button>
             {/* <Dropdown overlay={menuCnt} placement="topCenter">
