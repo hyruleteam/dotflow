@@ -11,7 +11,8 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {fetchList, showInitModal, showImportModal, showData, deleteData} from '../../actions/projectList';
 
-const {remote,shell} = window.require('electron');
+const ButtonGroup = Button.Group;
+const {remote, shell} = window.require('electron');
 const {consoleWin} = remote.getGlobal('services');
 
 class ProjectList extends Component {
@@ -29,7 +30,7 @@ class ProjectList extends Component {
     consoleWin.init(id)
   }
 
-  openFinder(fullPath){
+  openFinder(fullPath) {
     shell.openItem(fullPath)
   }
 
@@ -58,74 +59,75 @@ class ProjectList extends Component {
           if (!record.isInit) {
             return (
               <div>
-                <span
-                  className={publicStyles['op-list-btn']}
-                  key={record._id + '1'}
-                  onClick={() => {
-                  this
-                    .props
-                    .showInitModal(true, record)
-                }}>
+                <ButtonGroup>
                   <Tooltip placement="top" title="初始化项目">
-                    <Icon type="code-o"/>
+                    <Button
+                      type="primary"
+                      icon="code-o"
+                      key={record._id + '1'}
+                      onClick={() => {
+                      this
+                        .props
+                        .showInitModal(true, record)
+                    }}/>
                   </Tooltip>
-                  {/* <Icon type="code-o" /> */}
-                </span>
-                <Popconfirm
-                  key={record._id + '3'}
-                  placement="topRight"
-                  title="确认删除？"
-                  onConfirm={() => {
-                  this
-                    .props
-                    .deleteData(record._id)
-                }}
-                  okText="确认"
-                  cancelText="取消">
-                  <span className={publicStyles['op-list-btn']}>
+
+                  <Popconfirm
+                    key={record._id + '4'}
+                    placement="topRight"
+                    title="确认删除？"
+                    onConfirm={() => {
+                    this
+                      .props
+                      .deleteData(record._id)
+                  }}
+                    okText="确认"
+                    cancelText="取消">
                     <Tooltip placement="top" title="删除">
-                      <Icon type="delete"/>
+                      <Button type="primary" icon="delete"/>
                     </Tooltip>
-                  </span>
-                </Popconfirm>
+                  </Popconfirm>
+
+                </ButtonGroup>
               </div>
             )
           } else {
             return (
               <div>
-                <span
-                  className={publicStyles['op-list-btn']}
-                  key={record._id + '2'}
-                  onClick={() => this.openConsole(record._id)}>
+
+                <ButtonGroup>
                   <Tooltip placement="top" title="打开调试">
-                    <Icon type="play-circle"/>
+                    <Button
+                      type="primary"
+                      icon="play-circle-o"
+                      key={record._id + '2'}
+                      onClick={() => this.openConsole(record._id)}/>
                   </Tooltip>
-                </span>
-                <span
-                  className={publicStyles['op-list-btn']}
-                  key={record._id + '3'}
-                  onClick={() => this.openFinder(record.allPath)}>
+
                   <Tooltip placement="top" title="打开文件位置">
-                    <Icon type="search"/>
+                    <Button
+                      type="primary"
+                      icon="search"
+                      key={record._id + '3'}
+                      onClick={() => this.openFinder(record.allPath)}/>
                   </Tooltip>
-                </span>
-                <Popconfirm
-                  key={record._id + '4'}
-                  placement="topRight"
-                  title="确认删除？"
-                  onConfirm={() => {
-                  this
-                    .props
-                    .deleteData(record._id)
-                }}
-                  okText="确认"
-                  cancelText="取消">
-                  <span className={publicStyles['op-list-btn']}>
-                    <Tooltip placement="top" title="打开调试">
-                      <Icon type="delete"/>
+
+                  <Popconfirm
+                    key={record._id + '4'}
+                    placement="topRight"
+                    title="确认删除？"
+                    onConfirm={() => {
+                    this
+                      .props
+                      .deleteData(record._id)
+                  }}
+                    okText="确认"
+                    cancelText="取消">
+                    <Tooltip placement="top" title="删除">
+                      <Button type="primary" icon="delete"/>
                     </Tooltip>
-                  </span>
-                </Popconfirm>
+                  </Popconfirm>
+                </ButtonGroup>
               </div>
             )
           }
