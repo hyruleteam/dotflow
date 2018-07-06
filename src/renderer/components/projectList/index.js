@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Table, Popconfirm, Button, Icon, Tooltip} from 'antd';
+import {Table, Popconfirm, Button, Tooltip} from 'antd';
 
 import MainLayout from '../layout/MainLayout';
 import publicStyles from '../layout/public.less';
