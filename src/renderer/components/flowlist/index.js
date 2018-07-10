@@ -49,7 +49,7 @@ class FlowList extends Component {
             {this.props.flowlist.list.map((item) => {
               return (
                 <Col span={8} style={{marginBottom:'10px'}} key={item._id}>
-                  <Card title={item.name} loading={this.props.common.status} bordered={false} 
+                  <Card title={item.name} loading={this.props.common.status} bordered={false}
                   actions={this.renderActions(item)}
                   className={styles.card}>
                   <Meta

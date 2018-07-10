@@ -1,18 +1,22 @@
 import React, {Component} from 'react';
-import {Button, Icon} from 'antd';
+import {
+    Menu,
+    Dropdown,
+    Button,
+    Icon,
+    Modal,
+    Form,
+    Input
+} from 'antd';
 
 import styles from './index.less';
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {showDataRequest} from '../../actions/projectList';
-import {changeTerminalStatus} from '../../actions/consoleWin';
+import {changeTerminalStatus, showGitModal} from '../../actions/consoleWin';
 
 import Terminal from './terminal';
-
-// const menuCnt = (   <Menu>     <Menu.Item>       <a target="_blank"
-// rel="noopener noreferrer" href="http://www.alipay.com/">1st menu item</a>
-// </Menu.Item>   </Menu> )
 
 const {ipcRenderer, shell, remote} = window.require('electron')
 const childProcess = window.require('child_process');
@@ -23,6 +27,16 @@ const convert = new Convert();
 
 let pid = null;
 let gitContent = ''
+
+const FormItem = Form.Item;
+const formItemLayout = {
+    labelCol: {
+        span: 6
+    },
+    wrapperCol: {
+        span: 16
+    }
+};
 
 const ProjectStatus = (props) => {
     const {terminalStatus, startProject, stopProject} = props;
@@ -183,7 +197,10 @@ class ConsoleWin extends Component {
             .changeTerminalStatus(0, gitContent)
     }
 
-    async runGitCommand(cmd, pathName) {
+    async runGitCommand(cmd) {
+        gitContent = '';
+        this.stopProject();
+        const pathName = `${this.props.projectList.data.allPath}`
         await consoleWin
             .rumCommand(cmd, pathName)
             .then(res => {
@@ -195,15 +212,46 @@ class ConsoleWin extends Component {
             })
     }
 
-    async commitProjectByGit() {
-        gitContent = '';
-        this.stopProject();
-        const pathName = `${this.props.projectList.data.allPath}`
+    async gitPull() {
+        await this.runGitCommand('git pull')
+    }
 
-        await this.runGitCommand('git pull', pathName)
-        await this.runGitCommand('git add .', pathName)
-        await this.runGitCommand(`git commit -m "Auto-commit ${new Date()}"`, pathName)
-        await this.runGitCommand('git push', pathName)
+    async gitAdd() {
+        await this.runGitCommand('git add .')
+    }
+
+    async preGitCommit() {
+        this
+            .props
+            .showGitModal(true)
+    }
+
+    async gitCommit(msg) {
+        await this.runGitCommand(`git commit -m "${msg}"`)
+    }
+
+    async gitPush() {
+        await this.runGitCommand('git push')
+    }
+
+    async gitStash() {
+        await this.runGitCommand('git stash')
+    }
+
+    async gitStashPop() {
+        await this.runGitCommand('git stash pop')
+    }
+
+    async gitStatus() {
+        await this.runGitCommand('git status')
+    }
+
+    async gitLogs() {
+        await this.runGitCommand('git log')
+    }
+
+    async gitReset() {
+        await this.runGitCommand('git reset --hard')
     }
 
     cleanLog() {
@@ -216,9 +264,131 @@ class ConsoleWin extends Component {
         shell.openItem(fullPath)
     }
 
+    async handleMenuClick(e) {
+        switch (e.key) {
+            case 'pull':
+                await this.gitPull();
+                break;
+            case 'add':
+                await this.gitAdd();
+                break;
+            case 'commit':
+                await this.preGitCommit();
+                break;
+            case 'push':
+                await this.gitPush();
+                break;
+            case 'stash':
+                await this.gitStash();
+                break;
+            case 'pop':
+                await this.gitStashPop();
+                break;
+            case 'reset':
+                await this.gitReset();
+                break;
+            case 'status':
+                await this.gitStatus();
+                break;
+            case 'logs':
+                await this.gitLogs();
+                break;
+            default:
+                await this.gitPull();
+        }
+    }
+
     render() {
+        const menu = (
+            <Menu onClick={(e) => {
+                this.handleMenuClick(e)
+            }}>
+                <Menu.Item key='pull'>
+                    <span>更新</span>
+                </Menu.Item>
+                <Menu.Item key='add'>
+                    <span>添加</span>
+                </Menu.Item>
+                <Menu.Item key='commit'>
+                    <span>本地提交</span>
+                </Menu.Item>
+                <Menu.Item key='push'>
+                    <span>提交远程仓库</span>
+                </Menu.Item>
+                <Menu.Item key='stash'>
+                    <span>本地暂存</span>
+                </Menu.Item>
+                <Menu.Item key='pop'>
+                    <span>恢复暂存</span>
+                </Menu.Item>
+                <Menu.Item key='status'>
+                    <span>查看状态</span>
+                </Menu.Item>
+                <Menu.Item key='logs'>
+                    <span>查看日志</span>
+                </Menu.Item>
+                <Menu.Item key='reset'>
+                    <span>还原项目</span>
+                </Menu.Item>
+            </Menu>
+        );
+
+        const GitModel = Form.create({})((props) => {
+            const {visible, form} = props;
+            const {getFieldDecorator} = form;
+
+            const handleOk = () => {
+                props
+                    .form
+                    .validateFields(async(err, values) => {
+                        if (!err) {
+                            await this.gitCommit(values.gitmsg)
+                            this
+                                .props
+                                .showGitModal(false);
+                        }
+                    });
+            }
+
+            const handleCancel = () => {
+                this
+                    .props
+                    .showGitModal(false);
+            }
+
+            return (
+                <div>
+                    <Modal
+                        title="提交信息"
+                        okText="确定"
+                        cancelText="取消"
+                        visible={visible}
+                        onOk={() => {
+                        handleOk()
+                    }}
+                        onCancel={() => {
+                        handleCancel()
+                    }}>
+                        <Form layout="horizontal">
+                            <FormItem label="提交信息" {...formItemLayout}>
+                                {getFieldDecorator('gitmsg', {
+                                    rules: [
+                                        {
+                                            required: true,
+                                            message: '请输入提交信息!'
+                                        }
+                                    ]
+                                })(<Input placeholder="请输入提交信息"/>)
+}
+                            </FormItem>
+                        </Form>
+                    </Modal>
+                </div>
+            );
+        })
         return (
             <div className={styles['m-console']}>
+                < GitModel visible={this.props.consoleWin.gitVisible}/>
                 <div className={styles['m-console-hd']}>
                     <div className={styles['m-console-hd__tit']}>当前项目:{this.props.projectList.data
                             ? this.props.projectList.data.name
@@ -244,14 +414,9 @@ class ConsoleWin extends Component {
                 </div>
                 <Terminal terminalContent={this.props.terminalContent}></Terminal>
                 <div className={styles['m-console-opration']}>
-                    <Button
-                        type="primary"
-                        ghost
-                        size="small"
-                        className={styles['op-btn']}
-                        onClick={() => {
-                        this.commitProjectByGit()
-                    }}>提交</Button>
+                    <Dropdown overlay={menu} placement="topCenter" trigger={['click']}>
+                        <Button type="primary" ghost size="small" className={styles['op-btn']}>GIT操作</Button>
+                    </Dropdown>
                     <Button
                         type="primary"
                         ghost
@@ -269,9 +434,6 @@ class ConsoleWin extends Component {
                         onClick={() => {
                         this.openFinder(this.props.projectList.data.allPath)
                     }}>项目位置</Button>
-                    {/* <Dropdown overlay={menuCnt} placement="topCenter">
-              <Button size="small" className={styles['op-btn']}>更多命令</Button>
-            </Dropdown> */}
                 </div>
             </div>
         );
@@ -279,11 +441,12 @@ class ConsoleWin extends Component {
 }
 
 const mapStateToProps = store => {
-    return {projectList: store.projectList, common: store.common, terminalStatus: store.consoleWin.terminalStatus};
+    return {projectList: store.projectList, common: store.common, terminalStatus: store.consoleWin.terminalStatus, consoleWin: store.consoleWin};
 };
 
 const mapDispatchToProps = dispatch => {
     return {
+        showGitModal: bindActionCreators(showGitModal, dispatch),
         showDataRequest: bindActionCreators(showDataRequest, dispatch),
         changeTerminalStatus: bindActionCreators(changeTerminalStatus, dispatch)
     };
