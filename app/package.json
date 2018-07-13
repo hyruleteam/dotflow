@@ -1,6 +1,6 @@
 {
   "name": "Dotflow",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "productName": "Dotflow",
   "description": "前端工作平台",
   "main": "dist/main.js",
@@ -17,6 +17,11 @@
     "shelljs": "0.8.2",
     "fs-extra": "6.0.1",
     "babel-runtime": "6.26.0",
+    "update-electron-app": "^1.3.0",
     "babel-plugin-transform-runtime": "6.23.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:hyruleteam/dotflow.git"
   }
 }

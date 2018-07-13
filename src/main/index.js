@@ -11,6 +11,7 @@ import * as initProject from './services/initProject';
 import * as consoleWin from './services/consoleWin';
 import * as config from './configs/config';
 
+const updateApp = require('update-electron-app')()
 const dbstore = db.init();
 
 log.transports.file.level = 'info';

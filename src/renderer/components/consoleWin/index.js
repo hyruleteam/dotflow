@@ -400,7 +400,6 @@ class ConsoleWin extends Component {
                     <Dropdown overlay={npmMenu} placement="topCenter" trigger={['click']}>
                         <Button type="primary" ghost size="small" className={styles['op-btn']}>NPM操作</Button>
                     </Dropdown>
-                    <Button type="primary" ghost size="small" className={styles['op-btn']}>测试</Button>
                     <Button
                         type="primary"
                         ghost
