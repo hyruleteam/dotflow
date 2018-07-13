@@ -51,6 +51,7 @@ export function rumCommand(command, projectDir) {
   log.info(`运行命令:${command}`)
   return new Promise(function (resolve, reject) {
     shell.cd(projectDir)
+    let version = shell.exec(`${command}`, { async: true, silent: true});
     shell.exec(`${command}`, (code, stdout, stderr) => {
       if (stderr) {
         reject({code: 0, msg: stderr});

@@ -18,15 +18,15 @@ import {changeTerminalStatus, showGitModal} from '../../actions/consoleWin';
 
 import Terminal from './terminal';
 
-const {ipcRenderer, shell, remote} = window.require('electron')
+// const shelljs = window.require('shelljs');
+const {ipcRenderer, shell} = window.require('electron')
 const childProcess = window.require('child_process');
 const process = window.require('process');
-const {consoleWin} = remote.getGlobal('services');
+// const {consoleWin} = remote.getGlobal('services');
 const Convert = require('ansi-to-html');
 const convert = new Convert();
 
 let pid = null;
-let gitContent = ''
 
 const FormItem = Form.Item;
 const formItemLayout = {
@@ -181,77 +181,26 @@ class ConsoleWin extends Component {
         ipcRenderer.send('send-pid', null)
     }
 
-    showNormalGitMsg(type, data) {
-        if (type === 0) {
-            gitContent += `<code>${data
-                .msg
-                .toString()}</code>`
-        } else if (type === 1) {
-            gitContent += `<code style='color:#f00'>${data
-                .msg
-                .toString()}</code>`
-        }
-
+    showNormalMsg(data) {
+        let content = ""
+        content += `<code>${data.toString()}</code>`
         this
             .props
-            .changeTerminalStatus(0, gitContent)
+            .changeTerminalStatus(0, content)
     }
 
-    async runGitCommand(cmd) {
-        gitContent = '';
+    runCommand(cmd) {
         this.stopProject();
         const pathName = `${this.props.projectList.data.allPath}`
-        await consoleWin
-            .rumCommand(cmd, pathName)
-            .then(res => {
-                this.showNormalGitMsg(0, res)
-            })
-            .catch(err => {
-                console.log(err.msg)
-                this.showNormalGitMsg(1, err)
-            })
-    }
-
-    async gitPull() {
-        await this.runGitCommand('git pull')
-    }
-
-    async gitAdd() {
-        await this.runGitCommand('git add .')
-    }
-
-    async preGitCommit() {
-        this
-            .props
-            .showGitModal(true)
-    }
-
-    async gitCommit(msg) {
-        await this.runGitCommand(`git commit -m "${msg}"`)
-    }
-
-    async gitPush() {
-        await this.runGitCommand('git push')
-    }
-
-    async gitStash() {
-        await this.runGitCommand('git stash')
-    }
-
-    async gitStashPop() {
-        await this.runGitCommand('git stash pop')
-    }
-
-    async gitStatus() {
-        await this.runGitCommand('git status')
-    }
-
-    async gitLogs() {
-        await this.runGitCommand('git log')
-    }
-
-    async gitReset() {
-        await this.runGitCommand('git reset --hard')
+        childProcess.exec(`${cmd}`, {
+            cwd: pathName
+        }, (stdout, stderr) => {
+            if (stderr) {
+                this.showNormalMsg(stderr)
+            } else {
+                this.showNormalMsg(stdout)
+            }
+        })
     }
 
     cleanLog() {
@@ -264,57 +213,71 @@ class ConsoleWin extends Component {
         shell.openItem(fullPath)
     }
 
-    async handleMenuClick(e) {
+    handleMenuClick(e) {
         switch (e.key) {
             case 'pull':
-                await this.gitPull();
-                break;
-            case 'add':
-                await this.gitAdd();
+                this.runCommand('git pull')
                 break;
             case 'commit':
-                await this.preGitCommit();
-                break;
+                this.runCommand('git add .')
+                this
+                    .props
+                    .showGitModal(true)
+                    break;
             case 'push':
-                await this.gitPush();
+                this.runCommand('git push')
                 break;
             case 'stash':
-                await this.gitStash();
+                this.runCommand('git stash')
                 break;
             case 'pop':
-                await this.gitStashPop();
+                this.runCommand('git stash pop')
                 break;
             case 'reset':
-                await this.gitReset();
+                this.runCommand('git reset --hard')
                 break;
             case 'status':
-                await this.gitStatus();
+                this.runCommand('git status')
                 break;
             case 'logs':
-                await this.gitLogs();
+                this.runCommand('git log')
                 break;
             default:
-                await this.gitPull();
+                this.runCommand('git pull')
+        }
+    }
+
+    handleNpmMenuClick(e){
+        switch (e.key) {
+            case 'install':
+                this.runCommand('npm install')
+                break;
+            case 'build':
+                this.buildProject()
+                break;
+            case 'test':
+                this.runCommand('npm test')
+                break;
+            default:
+                this.runCommand('npm test')
         }
     }
 
     render() {
-        const menu = (
+        const gitMenu = (
             <Menu onClick={(e) => {
                 this.handleMenuClick(e)
             }}>
-                <Menu.Item key='pull'>
-                    <span>更新</span>
-                </Menu.Item>
-                <Menu.Item key='add'>
-                    <span>添加</span>
-                </Menu.Item>
                 <Menu.Item key='commit'>
                     <span>本地提交</span>
+                </Menu.Item>
+                <Menu.Item key='pull'>
+                    <span>更新代码</span>
                 </Menu.Item>
                 <Menu.Item key='push'>
                     <span>提交远程仓库</span>
                 </Menu.Item>
+                < Menu.Divider/>
                 <Menu.Item key='stash'>
                     <span>本地暂存</span>
                 </Menu.Item>
@@ -333,6 +296,23 @@ class ConsoleWin extends Component {
             </Menu>
         );
 
+        const npmMenu = (
+            <Menu onClick={(e) => {
+                this.handleNpmMenuClick(e)
+            }}>
+                <Menu.Item key='install'>
+                    <span>安装</span>
+                </Menu.Item>
+                <Menu.Item key='build'>
+                    <span>打包发布</span>
+                </Menu.Item>
+                <Menu.Item key='test'>
+                    <span>测试</span>
+                </Menu.Item>
+                < Menu.Divider />
+            </Menu>
+        );
+
         const GitModel = Form.create({})((props) => {
             const {visible, form} = props;
             const {getFieldDecorator} = form;
@@ -342,7 +322,7 @@ class ConsoleWin extends Component {
                     .form
                     .validateFields(async(err, values) => {
                         if (!err) {
-                            await this.gitCommit(values.gitmsg)
+                            await this.runCommand(`git commit -m "${values.gitmsg}"`)
                             this
                                 .props
                                 .showGitModal(false);
@@ -414,17 +394,12 @@ class ConsoleWin extends Component {
                 </div>
                 <Terminal terminalContent={this.props.terminalContent}></Terminal>
                 <div className={styles['m-console-opration']}>
-                    <Dropdown overlay={menu} placement="topCenter" trigger={['click']}>
+                    <Dropdown overlay={gitMenu} placement="topCenter" trigger={['click']}>
                         <Button type="primary" ghost size="small" className={styles['op-btn']}>GIT操作</Button>
                     </Dropdown>
-                    <Button
-                        type="primary"
-                        ghost
-                        size="small"
-                        className={styles['op-btn']}
-                        onClick={() => {
-                        this.buildProject()
-                    }}>发布</Button>
+                    <Dropdown overlay={npmMenu} placement="topCenter" trigger={['click']}>
+                        <Button type="primary" ghost size="small" className={styles['op-btn']}>NPM操作</Button>
+                    </Dropdown>
                     <Button type="primary" ghost size="small" className={styles['op-btn']}>测试</Button>
                     <Button
                         type="primary"
