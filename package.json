@@ -1,7 +1,7 @@
 {
   "name": "Dotflow",
   "version": "1.0.0",
-  "private": true,
+  "repository": "https://github.com/hyruleteam/dotflow",
   "dependencies": {
     "ansi-to-html": "^0.6.4",
     "antd": "^3.5.0",
@@ -147,9 +147,5 @@
   },
   "devDependencies": {
     "less-loader": "^4.1.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:hyruleteam/dotflow.git"
-}
+  }
 }
