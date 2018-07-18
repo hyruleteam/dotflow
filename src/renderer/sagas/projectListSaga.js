@@ -72,7 +72,6 @@ export function * projectDelete(action) {
 
 export function * projectInitComplete(action) {
   try {
-    console.log(action.data)
     const response = yield call(changeStatus, action.data);
     if (response.code === 1) {
       // yield put({type: 'PROJECTLIST_INITMODAL',initVisible:false});

@@ -61,7 +61,7 @@ const GitModel = Form.create({
             return {
                 name: Form.createFormField({value: props.data.name}),
                 description: Form.createFormField({value: props.data.description}),
-                gitRepo: Form.createFormField({value: props.data.gitRepo})
+                tempURL: Form.createFormField({value: props.data.tempURL})
             };
         }
     },
@@ -104,7 +104,7 @@ const GitModel = Form.create({
                         })(<Input placeholder="请输入脚手架描述"/>)}
                     </FormItem>
                     <FormItem label="git repo 地址" {...formItemLayout}>
-                        {getFieldDecorator('gitRepo', {
+                        {getFieldDecorator('tempURL', {
                             rules: [
                                 {
                                     required: true,

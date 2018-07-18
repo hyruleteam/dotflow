@@ -78,7 +78,7 @@ const ImportModal = Form.create({
 						return {
 								name: Form.createFormField({value: props.data.name}),
 								description: Form.createFormField({value: props.data.description}),
-								gitRepo: Form.createFormField({value: props.data.gitRepo})
+								tempURL: Form.createFormField({value: props.data.tempURL})
 						};
 				}
 		},

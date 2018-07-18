@@ -32,6 +32,7 @@ export async function generateByGit(data) {
   const tmpInfo = data.templateData
   const reg = /\.git$/;
   const file_name = /(.*\/)*([^.]+).*/ig;
+
   if (tmpInfo.type === 'git') {
     return new Promise(function (resolve, reject) {
       if (!reg.test(tmpInfo.tempURL)) {

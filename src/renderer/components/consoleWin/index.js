@@ -197,8 +197,10 @@ class ConsoleWin extends Component {
         }, (stdout, stderr) => {
             if (stderr) {
                 this.showNormalMsg(stderr)
-            } else {
+            } else if (stdout) {
                 this.showNormalMsg(stdout)
+            }else{
+                this.showNormalMsg("不是GIT项目，请先初始化")
             }
         })
     }
@@ -215,6 +217,9 @@ class ConsoleWin extends Component {
 
     handleMenuClick(e) {
         switch (e.key) {
+            case 'init':
+                this.runCommand('git init')
+                break;
             case 'pull':
                 this.runCommand('git pull')
                 break;
@@ -278,6 +283,9 @@ class ConsoleWin extends Component {
                     <span>提交远程仓库</span>
                 </Menu.Item>
                 < Menu.Divider/>
+                <Menu.Item key='init'>
+                    <span>初始化</span>
+                </Menu.Item>
                 <Menu.Item key='stash'>
                     <span>本地暂存</span>
                 </Menu.Item>
