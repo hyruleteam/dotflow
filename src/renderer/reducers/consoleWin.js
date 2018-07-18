@@ -13,6 +13,11 @@ const consoleWinReducer = function (state = {}, action) {
                 ...state,
                 gitVisible: action.gitVisible
             };
+        case types.CONSOLEWIN_GITREMOTEMODAL:
+            return {
+                ...state,
+                gitRemoteVisible: action.gitRemoteVisible
+            };
         default:
             return state
     }

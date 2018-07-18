@@ -7,3 +7,7 @@ export function changeTerminalStatus(terminalStatus,terminalContent) {
 export function showGitModal(gitVisible) {
     return { type: types.CONSOLEWIN_GITMODAL, gitVisible};
 }
+
+export function showGitRemoteModal(gitRemoteVisible) {
+    return { type: types.CONSOLEWIN_GITREMOTEMODAL, gitRemoteVisible };
+}

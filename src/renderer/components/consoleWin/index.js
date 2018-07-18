@@ -14,7 +14,7 @@ import styles from './index.less';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {showDataRequest} from '../../actions/projectList';
-import {changeTerminalStatus, showGitModal} from '../../actions/consoleWin';
+import { changeTerminalStatus, showGitModal, showGitRemoteModal} from '../../actions/consoleWin';
 
 import Terminal from './terminal';
 
@@ -199,8 +199,6 @@ class ConsoleWin extends Component {
                 this.showNormalMsg(stderr)
             } else if (stdout) {
                 this.showNormalMsg(stdout)
-            }else{
-                this.showNormalMsg("不是GIT项目，请先初始化")
             }
         })
     }
@@ -231,6 +229,11 @@ class ConsoleWin extends Component {
                     break;
             case 'push':
                 this.runCommand('git push')
+                break;
+            case 'setOrigin':
+                this
+                    .props
+                    .showGitRemoteModal(true)
                 break;
             case 'stash':
                 this.runCommand('git stash')
@@ -301,6 +304,9 @@ class ConsoleWin extends Component {
                 <Menu.Item key='reset'>
                     <span>还原项目</span>
                 </Menu.Item>
+                <Menu.Item key='setOrigin'>
+                    <span>其他命令</span>
+                </Menu.Item>
             </Menu>
         );
 
@@ -321,7 +327,7 @@ class ConsoleWin extends Component {
             </Menu>
         );
 
-        const GitModel = Form.create({})((props) => {
+        const GitModal = Form.create({})((props) => {
             const {visible, form} = props;
             const {getFieldDecorator} = form;
 
@@ -374,9 +380,65 @@ class ConsoleWin extends Component {
                 </div>
             );
         })
+
+        const GitRemoteModal = Form.create({})((props) => {
+            const { visible, form } = props;
+            const { getFieldDecorator } = form;
+
+            const handleOk = () => {
+                props
+                    .form
+                    .validateFields(async (err, values) => {
+                        if (!err) {
+                            await this.runCommand(`${values.gitmsg}`)
+                            this
+                                .props
+                                .showGitRemoteModal(false);
+                        }
+                    });
+            }
+
+            const handleCancel = () => {
+                this
+                    .props
+                    .showGitRemoteModal(false);
+            }
+
+            return (
+                <div>
+                    <Modal
+                        title="其他命令"
+                        okText="确定"
+                        cancelText="取消"
+                        visible={visible}
+                        onOk={() => {
+                            handleOk()
+                        }}
+                        onCancel={() => {
+                            handleCancel()
+                        }}>
+                        <Form layout="horizontal">
+                            <FormItem label="其他命令" {...formItemLayout}>
+                                {getFieldDecorator('gitmsg', {
+                                    rules: [
+                                        {
+                                            required: true,
+                                            message: '请输入命令!'
+                                        }
+                                    ]
+                                })(<Input placeholder="请输入命令" />)
+                                }
+                            </FormItem>
+                        </Form>
+                    </Modal>
+                </div>
+            );
+        })
+
         return (
             <div className={styles['m-console']}>
-                < GitModel visible={this.props.consoleWin.gitVisible}/>
+                < GitModal visible={this.props.consoleWin.gitVisible}/>
+                < GitRemoteModal visible={this.props.consoleWin.gitRemoteVisible} />
                 <div className={styles['m-console-hd']}>
                     <div className={styles['m-console-hd__tit']}>当前项目:{this.props.projectList.data
                             ? this.props.projectList.data.name
@@ -429,6 +491,7 @@ const mapStateToProps = store => {
 const mapDispatchToProps = dispatch => {
     return {
         showGitModal: bindActionCreators(showGitModal, dispatch),
+        showGitRemoteModal : bindActionCreators(showGitRemoteModal,dispatch),
         showDataRequest: bindActionCreators(showDataRequest, dispatch),
         changeTerminalStatus: bindActionCreators(changeTerminalStatus, dispatch)
     };
